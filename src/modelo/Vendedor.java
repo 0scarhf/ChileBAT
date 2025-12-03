@@ -8,9 +8,7 @@ public class Vendedor extends Empleado {
         this.rol = "Vendedor";
     }
 
-    // Métodos específicos del diagrama UML para Vendedor
-    public Pedido iniciarVenta(int idPedidoNuevo) {
-        // Lógica de negocio: Un vendedor crea un pedido
-        return new Pedido(idPedidoNuevo);
+    public Pedido iniciarVenta(int idPedidoNuevo, Distribuidor cliente) {
+        return new Pedido(idPedidoNuevo, cliente);
     }
 }

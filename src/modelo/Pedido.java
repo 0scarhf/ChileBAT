@@ -9,9 +9,11 @@ public class Pedido {
     private Date fecha;
     private int montoTotal;
     private List<Producto> productos;
+    private Distribuidor cliente;
 
-    public Pedido(int idPedido) {
+    public Pedido(int idPedido, Distribuidor cliente) {
         this.idPedido = idPedido;
+        this.cliente = cliente; // <-- Asignamos al cliente
         this.fecha = new Date();
         this.productos = new ArrayList<>();
         this.montoTotal = 0;
@@ -29,6 +31,7 @@ public class Pedido {
         }
     }
 
+    public Distribuidor getCliente() { return cliente; }
     public int getMontoTotal() { return montoTotal; }
     public List<Producto> getProductos() { return productos; }
     public int getIdPedido() { return idPedido; }

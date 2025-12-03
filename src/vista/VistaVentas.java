@@ -2,7 +2,7 @@ package vista;
 
 import modelo.Pedido;
 import modelo.Producto;
-import modelo.Comprobante; // Importar nueva clase
+import modelo.Comprobante;
 import java.util.Scanner;
 import java.util.List;
 
