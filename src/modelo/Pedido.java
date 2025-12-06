@@ -37,7 +37,10 @@ public class Pedido {
     }
 
     public void agregarProducto(Producto p, int cantidad) {
-        productos.put(p, productos.getOrDefault(p, cantidad) + cantidad);
+        // Si el producto ya existe, obtener su cantidad actual y sumar la nueva
+        // Si no existe, usar 0 como base y sumar la cantidad
+        int cantidadActual = productos.getOrDefault(p, 0);
+        productos.put(p, cantidadActual + cantidad);
         calcularMonto();
     }
 

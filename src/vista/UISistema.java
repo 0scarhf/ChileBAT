@@ -33,11 +33,17 @@ public class UISistema {
                 case 4 -> mostrarClientes();
                 case 5 -> {
                     System.out.println("Saliendo del sistema BAT Chile...");
+                    // Guardar datos antes de salir
+                    controlInv.guardarInventario();
+                    System.out.println("Datos guardados correctamente.");
                     ejecutando = false;
                 }
                 default -> System.out.println("Opción inválida.");
             }
         }
+
+        // Cerrar Scanner al salir
+        sc.close();
     }
 
     private void mostrarMenu() {
