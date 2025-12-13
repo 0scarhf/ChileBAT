@@ -10,6 +10,7 @@ public class IngresarStock extends javax.swing.JFrame {
     public IngresarStock(ControladorInventario controlInv) {
         this.controlInv = controlInv; 
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         
         // Cargar las Marcas en el ComboBox
         MarcajComboBox.removeAllItems();

@@ -10,9 +10,11 @@ public class VerCliente extends javax.swing.JFrame {
 
     private final ControladorSistemaVentas controlVentas;
     private TableRowSorter<DefaultTableModel> sorter;
+
     public VerCliente(ControladorSistemaVentas controlVentas) {
         this.controlVentas = controlVentas;
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         inicializarTabla();
     }
 

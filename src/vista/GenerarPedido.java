@@ -14,6 +14,7 @@ public class GenerarPedido extends javax.swing.JFrame {
         this.controlVentas = controlVentas;
         this.pedidoActual = pedidoActual;
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         
         // Cargar los tipos de recibo en el ComboBox (Factura/Boleta)
         TipoReciboComboBox.removeAllItems();

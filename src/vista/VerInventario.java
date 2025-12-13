@@ -21,6 +21,7 @@ public class VerInventario extends javax.swing.JFrame {
     public VerInventario(ControladorInventario controlInv) {
         this.controlInv = controlInv;
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         inicializarTabla();
     }
 

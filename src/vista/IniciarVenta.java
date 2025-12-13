@@ -17,6 +17,7 @@ public class IniciarVenta extends javax.swing.JFrame {
     public IniciarVenta(ControladorSistemaVentas controlVentas) {
         this.controlVentas = controlVentas; 
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     /**
