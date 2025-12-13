@@ -1,0 +1,212 @@
+RUT,Nombre,DirecciÃ³n,Tipo
+66245101-2,Comercializadora Norte,Las Rosas 368,Distribuidor
+28871440-6,AlmacÃ©n El Sol,Av. Central 130,Minorista
+13352959-0,Distribuidora Norte,Av. Los Andes 1698,Distribuidor
+33194392-4,Comercial Regional,Calle Prat 1963,Distribuidor
+52752552-7,AlmacÃ©n DoÃ±a San JosÃ©,Av. ColÃ³n 541,Minorista
+16159609-6,Minimarket San JosÃ©,Camino Real 575,Minorista
+48692361-3,AlmacÃ©n Don San JosÃ©,Camino Real 300,Minorista
+48268478-6,Minimarket La Estrella,Av. Los Andes 156,Minorista
+83099044-7,Minimarket San JosÃ©,Av. ColÃ³n 66,Minorista
+96609317-1,AlmacÃ©n La Esperanza,San MartÃ­n 483,Minorista
+22874348-6,Comercial Norte,Av. Independencia 1906,Distribuidor
+1344509-4,Comercializadora Norte,Av. Central 641,Distribuidor
+61142167-9,AlmacÃ©n DoÃ±a La Esperanza,Av. Los Andes 1149,Minorista
+67842206-0,Comercializadora El Molino,Av. Central 1672,Distribuidor
+92467232-3,AlmacÃ©n Don Pepe,Av. Los Andes 1789,Minorista
+4474329-2,Comercial Regional,San MartÃ­n 1225,Distribuidor
+97742384-9,Kiosko La Esperanza,Camino Real 1789,Minorista
+87363422-5,Minimarket Don Pepe,Calle Prat 300,Minorista
+38397955-1,Comercializadora El Molino,San MartÃ­n 175,Distribuidor
+27332690-4,Minimarket San JosÃ©,Av. Central 305,Minorista
+88520458-9,Distribuidora Norte,O'Higgins 1611,Distribuidor
+74020032-7,Kiosko Don Pepe,Camino Real 760,Minorista
+63022215-8,Kiosko San JosÃ©,San MartÃ­n 1571,Minorista
+97885573-0,Comercializadora El Molino,Las Rosas 1656,Distribuidor
+48026392-0,Kiosko La Estrella,Camino Real 413,Minorista
+88376707-1,Comercializadora El Molino,San MartÃ­n 1549,Distribuidor
+4683532-0,AlmacÃ©n El Sol,San MartÃ­n 1265,Minorista
+70970868-3,AlmacÃ©n DoÃ±a San JosÃ©,Calle Prat 1154,Minorista
+7691254-5,Distribuidora Los Robles,Av. Central 1163,Distribuidor
+52025436-5,Comercializadora Los Robles,Camino Real 1412,Distribuidor
+17065174-5,Comercial Los Robles,Las Rosas 361,Distribuidor
+67635733-5,Minimarket El Sol,O'Higgins 275,Minorista
+2370590-4,Kiosko San JosÃ©,Av. ColÃ³n 1331,Minorista
+60388027-4,AlmacÃ©n La Estrella,Las Rosas 1121,Minorista
+82918523-2,Comercial Los Robles,O'Higgins 1494,Distribuidor
+94117017-8,Kiosko Don Pepe,Av. Independencia 1140,Minorista
+93171337-2,Comercializadora Norte,Av. Los Andes 886,Distribuidor
+77071833-3,AlmacÃ©n DoÃ±a La Esperanza,Camino Real 1282,Minorista
+77922958-9,Comercializadora Los Robles,Camino Real 442,Distribuidor
+18756038-4,AlmacÃ©n DoÃ±a La Estrella,Av. Central 393,Minorista
+58331607-8,Distribuidora Norte,Las Rosas 558,Distribuidor
+21496379-4,AlmacÃ©n DoÃ±a San JosÃ©,Av. Los Andes 1271,Minorista
+1950358-3,Distribuidora El Molino,Av. ColÃ³n 1956,Distribuidor
+48227504-1,AlmacÃ©n Don La Estrella,Las Rosas 958,Minorista
+82284531-7,Distribuidora Regional,San MartÃ­n 815,Distribuidor
+8438714-7,Comercial Los Robles,Av. ColÃ³n 582,Distribuidor
+74575908-7,AlmacÃ©n El Sol,O'Higgins 636,Minorista
+2349356-7,Comercial El Molino,Calle Prat 1779,Distribuidor
+32163019-7,Distribuidora Los Robles,Av. Independencia 479,Distribuidor
+40695658-8,Comercializadora Santa Rosa,San MartÃ­n 698,Distribuidor
+77067247-6,Comercializadora Norte,Av. ColÃ³n 648,Distribuidor
+99844462-8,Minimarket El Sol,Av. Independencia 753,Minorista
+94759636-6,AlmacÃ©n El Sol,Calle Prat 935,Minorista
+16225033-0,Comercializadora Norte,Camino Real 945,Distribuidor
+6992124-1,AlmacÃ©n DoÃ±a La Esperanza,San MartÃ­n 68,Minorista
+5164347-3,AlmacÃ©n DoÃ±a La Esperanza,Calle Prat 1363,Minorista
+75909565-0,Comercial Santa Rosa,Camino Real 276,Distribuidor
+36010706-1,AlmacÃ©n Don San JosÃ©,O'Higgins 999,Minorista
+41132480-8,Distribuidora Regional,Av. Independencia 86,Distribuidor
+96848719-1,AlmacÃ©n Don Pepe,Av. Los Andes 1268,Minorista
+89147383-3,Comercializadora Regional,Av. Los Andes 1231,Distribuidor
+6778981-6,AlmacÃ©n Don San JosÃ©,Av. Independencia 1393,Minorista
+90833136-8,AlmacÃ©n La Esperanza,Camino Real 1498,Minorista
+7599497-7,Comercial Los Robles,Av. Central 340,Distribuidor
+31902251-8,Minimarket El Sol,Camino Real 1443,Minorista
+13806830-1,Comercializadora Los Robles,Av. Central 312,Distribuidor
+63668626-5,Comercializadora Santa Rosa,Camino Real 852,Distribuidor
+50913912-6,Distribuidora El Molino,Camino Real 1868,Distribuidor
+15681197-5,Comercial El Molino,Calle Prat 1267,Distribuidor
+8453421-6,Comercializadora Los Robles,Av. Independencia 812,Distribuidor
+79003737-9,Kiosko La Esperanza,Calle Prat 763,Minorista
+61267997-2,Comercializadora El Molino,Av. ColÃ³n 406,Distribuidor
+16489604-1,Kiosko El Sol,Av. Central 30,Minorista
+75977620-3,Comercializadora Norte,Calle Prat 581,Distribuidor
+60276926-2,Minimarket Don Pepe,Av. Independencia 1985,Minorista
+22548613-2,Kiosko San JosÃ©,Camino Real 1489,Minorista
+19707468-4,AlmacÃ©n El Sol,San MartÃ­n 860,Minorista
+93790990-5,Comercializadora Norte,Av. ColÃ³n 1017,Distribuidor
+69918578-6,Comercial Norte,Calle Prat 1614,Distribuidor
+26810680-3,Distribuidora Santa Rosa,Av. Los Andes 654,Distribuidor
+36074679-4,Comercializadora El Molino,Av. Independencia 1575,Distribuidor
+84118144-6,Comercial Santa Rosa,Av. ColÃ³n 1207,Distribuidor
+30675709-7,AlmacÃ©n DoÃ±a La Estrella,Las Rosas 1493,Minorista
+18027527-2,Kiosko Don Pepe,Av. Central 586,Minorista
+22448309-4,Distribuidora Los Robles,Av. ColÃ³n 282,Distribuidor
+15005507-9,Comercial Norte,San MartÃ­n 1624,Distribuidor
+47819956-1,AlmacÃ©n Don Don Pepe,Av. Los Andes 112,Minorista
+34944665-1,Kiosko La Esperanza,O'Higgins 1498,Minorista
+2335483-4,AlmacÃ©n Don Pepe,Av. Los Andes 341,Minorista
+51674540-7,Comercial Norte,Av. Independencia 486,Distribuidor
+29691037-6,AlmacÃ©n La Estrella,Av. ColÃ³n 20,Minorista
+83417457-0,Distribuidora Regional,Av. Independencia 125,Distribuidor
+51764678-5,AlmacÃ©n San JosÃ©,Camino Real 865,Minorista
+89564529-5,Comercial Regional,Av. Central 1494,Distribuidor
+95173235-3,AlmacÃ©n DoÃ±a La Esperanza,Av. Los Andes 428,Minorista
+45040832-0,Minimarket La Esperanza,O'Higgins 1784,Minorista
+15381272-7,Distribuidora Norte,Av. Independencia 596,Distribuidor
+31932739-6,Kiosko La Estrella,Calle Prat 1374,Minorista
+86018509-6,Kiosko La Estrella,Calle Prat 368,Minorista
+62957432-4,Comercializadora El Molino,San MartÃ­n 1068,Distribuidor
+95197362-3,AlmacÃ©n DoÃ±a La Estrella,Camino Real 1067,Minorista
+83470658-4,AlmacÃ©n La Esperanza,Av. Central 1591,Minorista
+5809444-1,AlmacÃ©n La Esperanza,San MartÃ­n 1985,Minorista
+6912655-3,Comercializadora Los Robles,Av. ColÃ³n 261,Distribuidor
+36489983-5,Minimarket La Estrella,Calle Prat 1154,Minorista
+89066709-6,Comercial Santa Rosa,San MartÃ­n 750,Distribuidor
+86449512-1,Comercializadora Norte,Av. Central 119,Distribuidor
+43612793-1,Distribuidora Los Robles,Av. Central 242,Distribuidor
+71134564-5,Minimarket La Esperanza,Av. Central 1927,Minorista
+32591613-5,Comercial Los Robles,O'Higgins 946,Distribuidor
+67041671-2,AlmacÃ©n La Estrella,Av. Central 906,Minorista
+25830821-7,Comercial El Molino,Av. Independencia 1664,Distribuidor
+74691669-9,Comercializadora Santa Rosa,Av. ColÃ³n 1116,Distribuidor
+94391426-4,Kiosko San JosÃ©,Av. ColÃ³n 1419,Minorista
+27169866-6,Minimarket La Esperanza,San MartÃ­n 1162,Minorista
+46162117-5,Distribuidora Norte,Las Rosas 1113,Distribuidor
+21158956-7,Minimarket La Esperanza,Av. Los Andes 871,Minorista
+42966810-4,AlmacÃ©n La Estrella,Av. ColÃ³n 1724,Minorista
+49843383-2,Distribuidora Los Robles,Av. Central 204,Distribuidor
+30346087-9,Comercializadora Santa Rosa,Av. Independencia 1688,Distribuidor
+59632454-9,Comercial El Molino,Av. Los Andes 810,Distribuidor
+5395912-5,Kiosko San JosÃ©,Av. Los Andes 1292,Minorista
+16854611-1,AlmacÃ©n Don San JosÃ©,O'Higgins 1068,Minorista
+69389639-3,AlmacÃ©n Don Pepe,San MartÃ­n 1409,Minorista
+56740017-9,Kiosko El Sol,Av. ColÃ³n 1692,Minorista
+53537406-3,Distribuidora Regional,Av. ColÃ³n 470,Distribuidor
+25886303-9,Kiosko La Esperanza,Av. Independencia 578,Minorista
+69539262-5,AlmacÃ©n DoÃ±a El Sol,Av. ColÃ³n 1366,Minorista
+75740817-5,Comercial Los Robles,Las Rosas 171,Distribuidor
+69569272-9,AlmacÃ©n DoÃ±a San JosÃ©,Camino Real 1152,Minorista
+18152269-6,Comercializadora El Molino,San MartÃ­n 1751,Distribuidor
+63035795-6,Comercial El Molino,Av. Los Andes 1620,Distribuidor
+60001790-1,Kiosko El Sol,Calle Prat 767,Minorista
+40088053-4,Comercial El Molino,Camino Real 456,Distribuidor
+34293258-6,Distribuidora Santa Rosa,Av. Los Andes 1096,Distribuidor
+34753225-3,Comercializadora Los Robles,Calle Prat 1382,Distribuidor
+5821131-7,Distribuidora El Molino,Calle Prat 67,Distribuidor
+21671664-4,AlmacÃ©n DoÃ±a El Sol,O'Higgins 386,Minorista
+20435446-7,Comercializadora Norte,Av. Independencia 1114,Distribuidor
+43869099-3,Comercializadora El Molino,Av. Independencia 94,Distribuidor
+37548082-3,Comercial Santa Rosa,Calle Prat 585,Distribuidor
+25214931-3,Comercializadora Santa Rosa,Camino Real 1206,Distribuidor
+17222573-6,AlmacÃ©n Don La Esperanza,Av. Los Andes 1621,Minorista
+22906362-9,AlmacÃ©n DoÃ±a Don Pepe,Av. Los Andes 87,Minorista
+6388851-6,Kiosko La Esperanza,Calle Prat 1220,Minorista
+58973723-7,Distribuidora Los Robles,Av. Los Andes 210,Distribuidor
+53423462-7,Comercializadora Regional,Av. Independencia 645,Distribuidor
+90331059-6,Comercializadora Norte,O'Higgins 227,Distribuidor
+45360338-0,Distribuidora Regional,Av. Los Andes 844,Distribuidor
+57440367-7,Minimarket Don Pepe,San MartÃ­n 1359,Minorista
+15773533-7,Comercial El Molino,San MartÃ­n 1095,Distribuidor
+23576486-7,Minimarket La Estrella,Av. Central 555,Minorista
+82606953-8,Comercial Norte,Av. ColÃ³n 340,Distribuidor
+38003526-8,AlmacÃ©n DoÃ±a La Esperanza,Camino Real 651,Minorista
+2758986-2,Comercial El Molino,Calle Prat 903,Distribuidor
+59505100-2,AlmacÃ©n DoÃ±a La Esperanza,Av. ColÃ³n 1048,Minorista
+60916880-7,Distribuidora Santa Rosa,Av. Central 1959,Distribuidor
+15364619-9,Kiosko El Sol,Camino Real 1943,Minorista
+67825313-9,Minimarket Don Pepe,San MartÃ­n 798,Minorista
+45994576-0,AlmacÃ©n Don San JosÃ©,Calle Prat 424,Minorista
+28528554-8,AlmacÃ©n DoÃ±a La Esperanza,Las Rosas 1500,Minorista
+44944996-8,Minimarket San JosÃ©,Camino Real 57,Minorista
+83373353-8,AlmacÃ©n San JosÃ©,Av. Central 907,Minorista
+53340643-6,Comercializadora El Molino,O'Higgins 246,Distribuidor
+57781213-4,AlmacÃ©n DoÃ±a San JosÃ©,Camino Real 464,Minorista
+25031184-0,Comercial El Molino,Av. ColÃ³n 243,Distribuidor
+55135884-6,Minimarket Don Pepe,Av. Los Andes 462,Minorista
+39723807-1,Minimarket Don Pepe,Av. ColÃ³n 1967,Minorista
+93710072-9,Comercializadora Regional,Las Rosas 1792,Distribuidor
+46348540-9,Comercializadora Los Robles,San MartÃ­n 281,Distribuidor
+53290504-6,Comercializadora Norte,Camino Real 1210,Distribuidor
+67637272-2,Minimarket El Sol,O'Higgins 584,Minorista
+11969834-0,Kiosko La Estrella,Av. Los Andes 1602,Minorista
+17247018-0,Minimarket La Estrella,Camino Real 706,Minorista
+11322656-8,Comercial Norte,San MartÃ­n 1691,Distribuidor
+21848093-0,AlmacÃ©n La Estrella,Av. Los Andes 817,Minorista
+8447359-4,Distribuidora Santa Rosa,Camino Real 1907,Distribuidor
+78995393-5,Kiosko Don Pepe,Las Rosas 761,Minorista
+23249017-7,Comercial El Molino,San MartÃ­n 1099,Distribuidor
+10921997-8,Distribuidora Los Robles,Calle Prat 946,Distribuidor
+66274748-0,Comercializadora Santa Rosa,O'Higgins 1103,Distribuidor
+90859804-1,Minimarket San JosÃ©,Av. Independencia 1199,Minorista
+78106886-2,Comercial Los Robles,Av. Central 1436,Distribuidor
+48937610-3,AlmacÃ©n DoÃ±a La Esperanza,O'Higgins 1031,Minorista
+12008600-6,Kiosko El Sol,Av. Independencia 149,Minorista
+38657419-4,Comercializadora Los Robles,Av. Los Andes 478,Distribuidor
+63007247-7,AlmacÃ©n Don Pepe,Av. Independencia 53,Minorista
+37324908-1,Distribuidora El Molino,San MartÃ­n 281,Distribuidor
+20756657-5,Kiosko La Esperanza,Av. Los Andes 932,Minorista
+88809666-4,AlmacÃ©n Don La Esperanza,O'Higgins 1813,Minorista
+79786764-9,AlmacÃ©n DoÃ±a La Esperanza,O'Higgins 1481,Minorista
+54106150-7,Comercial Los Robles,Las Rosas 1952,Distribuidor
+37939176-0,Distribuidora Santa Rosa,O'Higgins 1841,Distribuidor
+38384313-0,Comercializadora El Molino,Camino Real 537,Distribuidor
+81737641-3,Minimarket San JosÃ©,Camino Real 1032,Minorista
+37819462-1,AlmacÃ©n DoÃ±a La Esperanza,Las Rosas 1870,Minorista
+93120151-5,Comercializadora Norte,Av. ColÃ³n 21,Distribuidor
+7835396-2,Comercial Santa Rosa,O'Higgins 299,Distribuidor
+27456984-2,AlmacÃ©n DoÃ±a La Esperanza,Av. Los Andes 649,Minorista
+74130492-5,Distribuidora Norte,O'Higgins 572,Distribuidor
+17103974-5,Distribuidora Los Robles,San MartÃ­n 1805,Distribuidor
+60002890-9,Minimarket Don Pepe,Las Rosas 479,Minorista
+73461967-1,Comercial Norte,Camino Real 615,Distribuidor
+82718262-8,Comercializadora Los Robles,Av. Central 1327,Distribuidor
+89630019-7,Comercial Santa Rosa,Av. Los Andes 1033,Distribuidor
+60537631-3,Minimarket Don Pepe,San MartÃ­n 1848,Minorista
+73948110-6,Kiosko Don Pepe,Las Rosas 1815,Minorista
+69537738-9,Comercial Los Robles,O'Higgins 1479,Distribuidor
+67684945-4,Distribuidora Regional,Las Rosas 509,Distribuidor
+43606007-4,Distribuidora El Molino,Av. Los Andes 772,Distribuidor
+57112349-4,Comercial Santa Rosa,Las Rosas 50,Distribuidor
