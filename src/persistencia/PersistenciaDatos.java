@@ -6,9 +6,9 @@ import java.util.*;
 
 public class PersistenciaDatos {
 
-    private static final String PATH_PRODUCTOS = "src/productos";
-    private static final String PATH_CLIENTES = "src/clientes";
-    private static final String PATH_VENTAS = "src/ventas";
+    private static final String PATH_PRODUCTOS = "C:\\Users\\carva\\Documents\\nitbinproye\\Chilebat2\\build\\classes\\productos";
+    private static final String PATH_CLIENTES = "C:\\Users\\carva\\Documents\\nitbinproye\\Chilebat2\\build\\classes\\clientes";
+    private static final String PATH_VENTAS = "C:\\Users\\carva\\Documents\\nitbinproye\\Chilebat2\\build\\classes\\ventas";
     private static final String PATH_COMPROBANTES = "src/comprobantes";
 
     public static List<Distribuidor> cargarClientes() {
