@@ -3,14 +3,15 @@ package persistencia;
 import modelo.*;
 import java.io.*;
 import java.util.*;
+import controlador.*;
 
 public class PersistenciaDatos {
-
-    private static final String PATH_PRODUCTOS = "C:\\Users\\carva\\Documents\\nitbinproye\\Chilebat2\\build\\classes\\productos";
-    private static final String PATH_CLIENTES = "C:\\Users\\carva\\Documents\\nitbinproye\\Chilebat2\\build\\classes\\clientes";
-    private static final String PATH_VENTAS = "C:\\Users\\carva\\Documents\\nitbinproye\\Chilebat2\\build\\classes\\ventas";
-    private static final String PATH_COMPROBANTES = "src/comprobantes";
-
+    
+    private static final String PATH_PRODUCTOS = "productos.txt";
+    private static final String PATH_CLIENTES = "clientes.txt";
+    private static final String PATH_VENTAS = "ventas.txt";
+    private static final String PATH_COMPROBANTES = "comprobantes.txt";
+    
     public static List<Distribuidor> cargarClientes() {
         List<Distribuidor> lista = new ArrayList<>();
 
@@ -90,8 +91,11 @@ public class PersistenciaDatos {
                         int precio = sc.nextInt();
                         int stock = sc.nextInt();
                         int stockMin = sc.nextInt();
-
-                        lista.add(new Producto(id, nombre, precio, stock, stockMin));
+                        
+                        String marcaBaseStr = nombre.split(" ")[0].trim();
+                        TipoMarca marcaEnum = TipoMarca.valueOf(marcaBaseStr.toUpperCase());
+                        
+                        lista.add(new Producto(id, marcaEnum, precio, stock, stockMin));
                     } catch (NoSuchElementException e) {
                         System.out.println("Advertencia: Registro " + numeroRegistro + " tiene formato incorrecto o datos faltantes, se omite.");
                     } catch (NumberFormatException e) {
@@ -112,91 +116,97 @@ public class PersistenciaDatos {
     }
 
 
-    public static List<Pedido> cargarVentas() {
+    public static List<Pedido> cargarVentas(ControladorInventario inventarioCtrl) {
         List<Pedido> ventas = new ArrayList<>();
 
-        try {
-            File archivo = new File(PATH_VENTAS);
-            if (!archivo.exists()) {
-                archivo.createNewFile();
-                System.out.println("Archivo de ventas no existía, se creó: " + PATH_VENTAS);
-                return ventas;
-            }
+            try {
+                File archivo = new File(PATH_VENTAS);
+                if (!archivo.exists()) {
+                    archivo.createNewFile();
+                    System.out.println("Archivo de ventas no existía, se creó: " + PATH_VENTAS);
+                    return ventas;
+                }
 
-            try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+                try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
 
-                String linea;
-                int numeroLinea = 0;
-                while ((linea = br.readLine()) != null) {
-                    numeroLinea++;
-                    linea = linea.trim();
+                    String linea;
+                    int numeroLinea = 0;
+                    while ((linea = br.readLine()) != null) {
+                        numeroLinea++;
+                        linea = linea.trim();
 
-                    // Filtrar líneas vacías y comentarios
-                    if (linea.isEmpty() || linea.startsWith("//")) {
-                        continue;
-                    }
-
-                    try {
-                        // Formato: id*rut*monto*id:cant,id:cant
-                        String[] partes = linea.split("\\*");
-
-                        // Validar que tenga exactamente 4 partes
-                        if (partes.length != 4) {
-                            System.out.println("Advertencia: Línea " + numeroLinea + " tiene formato incorrecto (se esperan 4 partes separadas por *), se omite.");
+                        // Filtrar líneas vacías y comentarios
+                        if (linea.isEmpty() || linea.startsWith("//")) {
                             continue;
                         }
 
-                        int idPedido = Integer.parseInt(partes[0].trim());
-                        String rutCliente = partes[1].trim();
-                        int montoTotal = Integer.parseInt(partes[2].trim());
+                        try {
+                            // Formato: id*rut*monto*id:cant,id:cant
+                            String[] partes = linea.split("\\*");
 
-                        String productosStr = partes[3].trim();
-                        if (productosStr.isEmpty()) {
-                            System.out.println("Advertencia: Línea " + numeroLinea + " no tiene productos, se omite.");
-                            continue;
-                        }
-
-                        String[] pares = productosStr.split(",");
-                        Map<Integer, Integer> mapa = new LinkedHashMap<>();
-
-                        for (String par : pares) {
-                            par = par.trim();
-                            if (par.isEmpty()) continue;
-
-                            String[] info = par.split(":");
-                            if (info.length != 2) {
-                                System.out.println("Advertencia: Línea " + numeroLinea + " - formato incorrecto en producto (se espera id:cantidad): " + par);
+                            // Validar que tenga exactamente 4 partes
+                            if (partes.length != 4) {
+                                System.out.println("Advertencia: Línea " + numeroLinea + " tiene formato incorrecto (se esperan 4 partes separadas por *), se omite.");
                                 continue;
                             }
 
-                            int idProd = Integer.parseInt(info[0].trim());
-                            int cantidad = Integer.parseInt(info[1].trim());
-                            mapa.put(idProd, cantidad);
-                        }
+                            int idPedido = Integer.parseInt(partes[0].trim());
+                            String rutCliente = partes[1].trim();
+                            int montoTotal = Integer.parseInt(partes[2].trim());
 
-                        if (!mapa.isEmpty()) {
-                            ventas.add(new Pedido(idPedido, rutCliente, montoTotal, mapa));
-                        } else {
-                            System.out.println("Advertencia: Línea " + numeroLinea + " no tiene productos válidos, se omite.");
+                            // ❗ SOLUCIÓN MÁS SIMPLE AL ERROR DE COMPILACIÓN: DECLARAR CLIENTE ❗
+                            // Creamos un objeto Distribuidor (cliente) stub/temporal para que compile
+                            Distribuidor cliente = new Distribuidor(rutCliente, "RUT SIN ENCONTRAR", "SIN DIRECCIÓN", "SIN TIPO");
+
+
+                            String productosStr = partes[3].trim();
+                            if (productosStr.isEmpty()) {
+                                System.out.println("Advertencia: Línea " + numeroLinea + " no tiene productos, se omite.");
+                                continue;
+                            }
+
+                            String[] pares = productosStr.split(",");
+                            Map<Integer, Integer> mapa = new LinkedHashMap<>();
+
+                            for (String par : pares) {
+                                par = par.trim();
+                                if (par.isEmpty()) continue;
+
+                                String[] info = par.split(":");
+                                if (info.length != 2) {
+                                    System.out.println("Advertencia: Línea " + numeroLinea + " - formato incorrecto en producto (se espera id:cantidad): " + par);
+                                    continue;
+                                }
+
+                                int idProd = Integer.parseInt(info[0].trim());
+                                int cantidad = Integer.parseInt(info[1].trim());
+                                mapa.put(idProd, cantidad);
+                            }
+
+                            if (!mapa.isEmpty()) {
+                                // Ahora 'cliente' existe y el código compila
+                                ventas.add(new Pedido(idPedido, cliente));
+                            } else {
+                                System.out.println("Advertencia: Línea " + numeroLinea + " no tiene productos válidos, se omite.");
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Advertencia: Línea " + numeroLinea + " tiene valores numéricos inválidos, se omite: " + e.getMessage());
+                        } catch (Exception e) {
+                            System.out.println("Advertencia: Línea " + numeroLinea + " tiene error al procesar, se omite: " + e.getMessage());
                         }
-                    } catch (NumberFormatException e) {
-                        System.out.println("Advertencia: Línea " + numeroLinea + " tiene valores numéricos inválidos, se omite: " + e.getMessage());
-                    } catch (Exception e) {
-                        System.out.println("Advertencia: Línea " + numeroLinea + " tiene error al procesar, se omite: " + e.getMessage());
                     }
+
                 }
 
+            } catch (FileNotFoundException e) {
+                System.out.println("Error: No se encontró el archivo de ventas: " + PATH_VENTAS);
+            } catch (IOException e) {
+                System.out.println("Error de E/S al cargar ventas: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Error inesperado cargando ventas: " + e.getMessage());
             }
 
-        } catch (FileNotFoundException e) {
-            System.out.println("Error: No se encontró el archivo de ventas: " + PATH_VENTAS);
-        } catch (IOException e) {
-            System.out.println("Error de E/S al cargar ventas: " + e.getMessage());
-        } catch (Exception e) {
-            System.out.println("Error inesperado cargando ventas: " + e.getMessage());
-        }
-
-        return ventas;
+            return ventas;
     }
 
 
@@ -211,7 +221,7 @@ public class PersistenciaDatos {
                 for (Producto p : lista) {
                     pw.println(
                             p.getIdProducto() + ";" +
-                                    p.getNombre() + ";" +
+                                    p.getMarca()+ ";" +
                                     p.obtenerPrecio() + ";" +
                                     p.getStock() + ";" +
                                     p.getStockMinimo()

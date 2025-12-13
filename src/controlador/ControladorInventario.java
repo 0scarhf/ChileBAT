@@ -2,59 +2,84 @@ package controlador;
 
 import modelo.Producto;
 import persistencia.PersistenciaDatos;
-
-import java.util.List;
+import java.util.*; // Importación corregida a * para incluir Map, List, LinkedHashMap, ArrayList
 
 public class ControladorInventario {
 
-    private List<Producto> inventario;
+    private Map<Integer, Producto> inventario;
 
     public ControladorInventario() {
-        this.inventario = PersistenciaDatos.cargarProductos();
-    }
-    //   OBTENER INVENTARIO
-    public List<Producto> obtenerInventario() {
-        return inventario;
-    }
-    //   BUSCAR PRODUCTO POR ID
-    public Producto buscarProducto(int idProducto) {
-        for (Producto p : inventario) {
-            if (p.getIdProducto() == idProducto) {
-                return p;
-            }
+        this.inventario = new LinkedHashMap<>();
+        
+        // 1. Delegación (Lectura O(n))
+        List<Producto> listaCargada = PersistenciaDatos.cargarProductos(); 
+
+        // 2. Gestión (Almacenamiento eficiente O(1))
+        for (Producto p : listaCargada) {
+            this.inventario.put(p.getIdProducto(), p);
         }
-        return null;
     }
-    //   DESCONTAR STOCK (VENTA)
+    
+    // Método privado para validar parámetros comunes (DRY)
+    private boolean validarProductoYCantidad(Producto producto, int cantidad) {
+        if (producto == null || cantidad <= 0) {
+            return false;
+        }
+        return true;
+    }
+
+    // OBTENER INVENTARIO
+    public List<Producto> obtenerInventario() {
+        return new ArrayList<>(inventario.values());
+    }
+
+    // BUSCAR PRODUCTO POR ID (Eficiencia O(1))
+    public Producto buscarProducto(int idProducto) {
+        return inventario.get(idProducto);
+    }
+    
+    // METODO GUARDAR INVENTARIO ACTUALIZADO (Delegación de Responsabilidad)
+    public void guardarInventario() {
+        // La responsabilidad de la E/S se delega, manteniendo el controlador limpio.
+        PersistenciaDatos.guardarProductos(new ArrayList<>(inventario.values()));
+    }
+
+    // DESCONTAR STOCK (VENTA)
     public boolean descontarStock(Producto producto, int cantidad) {
-        if (producto == null || cantidad <= 0)
+        // 1. Validar producto y cantidad
+        if (!validarProductoYCantidad(producto, cantidad)) {
             return false;
+        }
 
-        if (producto.getStock() < cantidad)
+        // 2. Validar stock
+        if (producto.getStock() < cantidad) {
             return false;
+        }
 
-        producto.restarStock(cantidad);   // ← CORREGIDO
+        // 3. Modificación del estado del objeto y persistencia
+        producto.restarStock(cantidad); 
         guardarInventario();
         return true;
     }
-    //   INGRESAR STOCK MANUAL
+
+    // INGRESAR STOCK MANUAL
     public boolean ingresarStock(int idProducto, int cantidad) {
         Producto p = buscarProducto(idProducto);
 
-        if (p == null || cantidad <= 0)
+        // 1. Validar producto y cantidad (Reutilizando la lógica)
+        if (!validarProductoYCantidad(p, cantidad)) {
             return false;
+        }
 
-        p.aumentarStock(cantidad);        // ← CORREGIDO
+        // 2. Modificación del estado del objeto y persistencia
+        p.aumentarStock(cantidad); 
         guardarInventario();
         return true;
     }
-    //   STOCK CRÍTICO
+
+    // STOCK CRÍTICO (El objeto Producto define la regla de negocio)
     public boolean esStockCritico(Producto p) {
-        return p.getStock() <= p.getStockMinimo();
-    }
-    //     GUARDAR INVENTARIO
-    public void guardarInventario() {
-        PersistenciaDatos.guardarProductos(inventario);
+        // Delegamos la lógica de la regla de negocio al objeto Producto (Cohesión)
+        return p != null && p.esStockCritico(); 
     }
 }
-

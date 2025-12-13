@@ -1,20 +1,30 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package vista;
+import java.awt.event.*;
 import vista.*;
-/**
- *
- * @author carva
- */
-public class GUI extends javax.swing.JFrame {
+import controlador.*;
 
-    /**
-     * Creates new form GUI
-     */
-    public GUI() {
+public class GUI extends javax.swing.JFrame {
+    
+    // 1. Atributos para almacenar los controladores (INYECCIÓN DE DEPENDENCIAS)
+    private final ControladorInventario controlInv;
+    private final ControladorSistemaVentas controlVentas;
+   
+    // 2. Constructor Modificado: Recibe los Controladores
+    public GUI(ControladorInventario inv, ControladorSistemaVentas ventas) {
+        this.controlInv = inv;
+        this.controlVentas = ventas;
         initComponents();
+        
+        // CRÍTICO: Asegurar el guardado de datos cuando la ventana se cierra (Cierre limpio)
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                // Llama al guardar y luego sale
+                controlInv.guardarInventario(); 
+                System.out.println("Inventario guardado al cerrar.");
+                System.exit(0);
+            }
+        });
     }
 
     /**
@@ -31,73 +41,94 @@ public class GUI extends javax.swing.JFrame {
         VerInventarioBoton = new javax.swing.JButton();
         IngresarStockBoton = new javax.swing.JButton();
         VerClientesBoton = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        SalirBoton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        RealizarVentaBoton.setText("Realizar Venta");
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        RealizarVentaBoton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        RealizarVentaBoton.setText("REALIZAR VENTA");
         RealizarVentaBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 RealizarVentaBotonActionPerformed(evt);
             }
         });
 
-        VerInventarioBoton.setText("Ver Inventario");
+        VerInventarioBoton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        VerInventarioBoton.setText("VER INVENTARIO");
         VerInventarioBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 VerInventarioBotonActionPerformed(evt);
             }
         });
 
-        IngresarStockBoton.setText("Ingresar Stock");
+        IngresarStockBoton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        IngresarStockBoton.setText("INGRESAR STOCK");
         IngresarStockBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 IngresarStockBotonActionPerformed(evt);
             }
         });
 
-        VerClientesBoton.setText("Ver Clientes");
+        VerClientesBoton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        VerClientesBoton.setText("VER CLIENTES");
         VerClientesBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 VerClientesBotonActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Salir");
+        SalirBoton.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.default.focusColor"));
+        SalirBoton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        SalirBoton.setText("SALIR");
+        SalirBoton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SalirBotonActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("BRITISH AMERICAN TOBACCO");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(59, 59, 59)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(44, 44, 44)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(IngresarStockBoton)
-                    .addComponent(RealizarVentaBoton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                    .addComponent(IngresarStockBoton, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                    .addComponent(RealizarVentaBoton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(VerInventarioBoton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(VerInventarioBoton, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
                     .addComponent(VerClientesBoton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(72, 72, 72))
+                .addGap(46, 46, 46))
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(154, 154, 154)
-                .addComponent(jButton5)
+                .addGap(130, 130, 130)
+                .addComponent(SalirBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(RealizarVentaBoton)
-                    .addComponent(VerInventarioBoton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(IngresarStockBoton)
-                    .addComponent(VerClientesBoton))
-                .addGap(55, 55, 55)
-                .addComponent(jButton5)
-                .addGap(45, 45, 45))
+                .addGap(27, 27, 27)
+                .addComponent(jLabel1)
+                .addGap(39, 39, 39)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(RealizarVentaBoton, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                    .addComponent(VerInventarioBoton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(IngresarStockBoton, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                    .addComponent(VerClientesBoton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(38, 38, 38)
+                .addComponent(SalirBoton)
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -116,81 +147,50 @@ public class GUI extends javax.swing.JFrame {
 
     private void RealizarVentaBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RealizarVentaBotonActionPerformed
         // TODO add your handling code here:
-        IniciarVenta nuevaVenta = new IniciarVenta();
+        IniciarVenta nuevaVenta = new IniciarVenta(controlVentas);
+        nuevaVenta.setLocationRelativeTo(this);
         nuevaVenta.setVisible(true);
     }//GEN-LAST:event_RealizarVentaBotonActionPerformed
 
     private void IngresarStockBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarStockBotonActionPerformed
-        // TODO add your handling code here:
-        IngresarStock ingresarStock = new IngresarStock();
+        // Abre la ventana IngresarStock, INYECTANDO el controlador de inventario
+        IngresarStock ingresarStock = new IngresarStock(controlInv);
+        ingresarStock.setLocationRelativeTo(this);
         ingresarStock.setVisible(true);
     }//GEN-LAST:event_IngresarStockBotonActionPerformed
 
     private void VerInventarioBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerInventarioBotonActionPerformed
         // TODO add your handling code here:
-        VerInventario inventario = new VerInventario();
+        // Abre VerInventario, INYECTANDO el controlador de inventario
+        VerInventario inventario = new VerInventario(controlInv);
+        inventario.setLocationRelativeTo(this);
         inventario.setVisible(true);
-        System.out.print("\nID Producto: ");
-        int id = leerEntero();
-
-        System.out.print("Cantidad a ingresar: ");
-        int cantidad = leerEntero();
-
-        boolean ok = controlInv.ingresarStock(id, cantidad);
-
-        if (ok)
-            System.out.println("Stock actualizado correctamente.");
-        else
-            System.out.println("ERROR: No se pudo ingresar el stock.");
     }//GEN-LAST:event_VerInventarioBotonActionPerformed
 
     private void VerClientesBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerClientesBotonActionPerformed
         // TODO add your handling code here:
-        VerCliente listaClientes = new VerCliente();
+        VerCliente listaClientes = new VerCliente(controlVentas);
+        listaClientes.setLocationRelativeTo(this);
         listaClientes.setVisible(true);
     }//GEN-LAST:event_VerClientesBotonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void SalirBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirBotonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SalirBotonActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GUI().setVisible(true);
-            }
-        });
+    // Asumo que jButton5 es el botón SALIR
+    private void SalirBoton(java.awt.event.ActionEvent evt) {
+        // Llama al WindowListener para guardar y cerrar
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)); 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton IngresarStockBoton;
     private javax.swing.JButton RealizarVentaBoton;
+    private javax.swing.JButton SalirBoton;
     private javax.swing.JButton VerClientesBoton;
     private javax.swing.JButton VerInventarioBoton;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

@@ -22,20 +22,6 @@ public class Pedido {
         this.montoTotal = 0;
     }
 
-
-    public Pedido(int idPedido, String rutCliente, int montoTotal, Map<Integer, Integer> mapaCantidades) {
-        this.idPedido = idPedido;
-        this.fecha = new Date();
-        this.montoTotal = montoTotal;
-        this.productos = new LinkedHashMap<>();
-        this.cliente = new Distribuidor(rutCliente, "DESCONOCIDO", "SIN DIRECCIÓN", "SIN TIPO");
-
-        for (Map.Entry<Integer, Integer> entry : mapaCantidades.entrySet()) {
-            Producto temporal = new Producto(entry.getKey());   // nuevo constructor en Producto
-            productos.put(temporal, entry.getValue());
-        }
-    }
-
     public void agregarProducto(Producto p, int cantidad) {
         // Si el producto ya existe, obtener su cantidad actual y sumar la nueva
         // Si no existe, usar 0 como base y sumar la cantidad

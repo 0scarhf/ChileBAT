@@ -5,15 +5,15 @@ import java.util.Objects;
 public class Producto {
 
     private int idProducto;
-    private String nombre;
+    private TipoMarca marca;
     private int valorUnitario;
     private int stock;
     private int stockMinimo;
 
 
-    public Producto(int id, String nombre, int valor, int stock, int stockMinimo) {
+    public Producto(int id, TipoMarca marca, int valor, int stock, int stockMinimo) {
         this.idProducto = id;
-        this.nombre = nombre;
+        this.marca = marca;
         this.valorUnitario = valor;
         this.stock = stock;
         this.stockMinimo = stockMinimo;
@@ -21,7 +21,7 @@ public class Producto {
 
     public Producto(int idProducto) {
         this.idProducto = idProducto;
-        this.nombre = "TEMP";
+        this.marca = marca;
         this.valorUnitario = 0;
         this.stock = 0;
         this.stockMinimo = 0;
@@ -46,7 +46,7 @@ public class Producto {
 
 
     public int getIdProducto() { return idProducto; }
-    public String getNombre() { return nombre; }
+    public TipoMarca getMarca() { return marca; }
     public int getStock() { return stock; }
     public int getStockMinimo() { return stockMinimo; }
 
@@ -67,6 +67,6 @@ public class Producto {
 
     @Override
     public String toString() {
-        return idProducto + " - " + nombre;
+        return idProducto + " - " + marca;
     }
 }

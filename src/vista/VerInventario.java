@@ -1,22 +1,52 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-package vista;
 
+package vista;
+import controlador.ControladorInventario;
+import modelo.Producto;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 /**
  *
  * @author carva
  */
 public class VerInventario extends javax.swing.JFrame {
 
-    /**
-     * Creates new form VerInventario
-     */
-    public VerInventario() {
+    private final ControladorInventario controlInv;
+    
+    private TableRowSorter<DefaultTableModel> sorter;
+    
+    private javax.swing.JTable inventarioTable;
+    
+    public VerInventario(ControladorInventario controlInv) {
+        this.controlInv = controlInv;
         initComponents();
+        inicializarTabla();
     }
 
+    private void inicializarTabla() {
+        // 1. Definir las columnas
+        DefaultTableModel model = new DefaultTableModel(
+            new Object[]{"ID", "Nombre", "Marca", "Precio", "Stock", "Stock Mínimo"}, 0
+        );
+        InventarioTabla.setModel(model);
+
+        // 2. Cargar datos
+        List<Producto> lista = controlInv.obtenerInventario(); 
+        
+        for (Producto p : lista) {
+            model.addRow(new Object[]{
+                p.getIdProducto(),
+                p.getMarca(), 
+                p.obtenerPrecio(),
+                p.getStock(),
+            });
+        }
+        
+        // 3. Inicializar el sorter para habilitar el filtrado
+        sorter = new TableRowSorter<>(model);
+        InventarioTabla.setRowSorter(sorter);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,8 +59,14 @@ public class VerInventario extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         InventarioTabla = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        BuscarPorIDjTextField = new javax.swing.JTextField();
+        BuscarBoton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         InventarioTabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -45,15 +81,58 @@ public class VerInventario extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(InventarioTabla);
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("LISTADO DE INVENTARIO");
+
+        jLabel2.setText("INGRESAR ID:");
+
+        BuscarPorIDjTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BuscarPorIDjTextFieldActionPerformed(evt);
+            }
+        });
+
+        BuscarBoton.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.default.focusColor"));
+        BuscarBoton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        BuscarBoton.setText("BUSCAR");
+        BuscarBoton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BuscarBotonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(56, 56, 56)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(BuscarPorIDjTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(BuscarBoton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(24, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(BuscarBoton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(BuscarPorIDjTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -70,43 +149,36 @@ public class VerInventario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VerInventario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VerInventario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VerInventario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VerInventario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void BuscarPorIDjTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarPorIDjTextFieldActionPerformed
+        filtrarTablaPorID();
+    }//GEN-LAST:event_BuscarPorIDjTextFieldActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new VerInventario().setVisible(true);
+    private void BuscarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarBotonActionPerformed
+        filtrarTablaPorID();
+    }//GEN-LAST:event_BuscarBotonActionPerformed
+
+    private void filtrarTablaPorID() {
+        String texto = BuscarPorIDjTextField.getText().trim();
+        
+        if (texto.length() == 0) {
+            sorter.setRowFilter(null); // Mostrar todos
+        } else {
+            try {
+                // Filtramos por la columna 0 (ID). El "(?i)" hace la búsqueda insensible a mayúsculas.
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto, 0)); 
+            } catch (java.util.regex.PatternSyntaxException e) {
+                // Si hay un error de sintaxis en la expresión regular
+                sorter.setRowFilter(null); 
             }
-        });
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BuscarBoton;
+    private javax.swing.JTextField BuscarPorIDjTextField;
     private javax.swing.JTable InventarioTabla;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables

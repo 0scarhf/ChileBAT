@@ -1,11 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package vista;
-
 import controlador.ControladorInventario;
 import controlador.ControladorSistemaVentas;
+import javax.swing.JOptionPane;
 import modelo.*;
 
 /**
@@ -14,11 +10,12 @@ import modelo.*;
  */
 public class IniciarVenta extends javax.swing.JFrame {
 
-    /**
-     * Creates new form IngresarVenta
-     */
-    private ControladorSistemaVentas controlVentas;
-    public IniciarVenta() {
+    // 1. Atributo para almacenar el controlador
+    private final ControladorSistemaVentas controlVentas;
+
+    // 2. Constructor
+    public IniciarVenta(ControladorSistemaVentas controlVentas) {
+        this.controlVentas = controlVentas; 
         initComponents();
     }
 
@@ -39,20 +36,23 @@ public class IniciarVenta extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Iniciar Venta");
+        jLabel1.setText("INICIAR VENTA");
 
         jLabel2.setText("Rut Cliente:");
 
-        RutClienteTextField.setText("aaa");
         RutClienteTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 RutClienteTextFieldActionPerformed(evt);
             }
         });
 
-        IngresarBoton.setText("Ingresar");
+        IngresarBoton.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.default.focusColor"));
+        IngresarBoton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        IngresarBoton.setText("INGRESAR");
         IngresarBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 IngresarBotonActionPerformed(evt);
@@ -65,28 +65,29 @@ public class IniciarVenta extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(123, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
-                .addComponent(RutClienteTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(102, 102, 102))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(163, 163, 163)
-                .addComponent(IngresarBoton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(67, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(IngresarBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(83, 83, 83))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(RutClienteTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(66, 66, 66))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(28, 28, 28)
                 .addComponent(jLabel1)
-                .addGap(95, 95, 95)
+                .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(RutClienteTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
-                .addComponent(IngresarBoton)
-                .addGap(15, 15, 15))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addComponent(IngresarBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -104,11 +105,35 @@ public class IniciarVenta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void IngresarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarBotonActionPerformed
-        // TODO add your handling code here:
-        GenerarPedido venta = new GenerarPedido();
-        venta.setVisible(true); // verificar previamente
+        String rutCliente = RutClienteTextField.getText().trim();
         
+        // 1. Validación de interfaz: si el campo está vacío
+        if (rutCliente.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, ingrese el RUT.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // 2. 🟢 CRÍTICO: Buscar el cliente delegando al controlador
+        Distribuidor cliente = controlVentas.buscarCliente(rutCliente);
         
+        // 3. Evaluar el resultado de la búsqueda
+        if (cliente != null) {
+            
+            // Si el cliente existe:
+            // 4. Flujo de Negocio: Iniciar Pedido (Controlador)
+            Pedido nuevoPedido = controlVentas.iniciarPedido(cliente);
+            
+            // 5. Abrir la siguiente ventana (GenerarPedido) e inyectar el estado/lógica
+            GenerarPedido pedidoGUI = new GenerarPedido(controlVentas, nuevoPedido);
+            pedidoGUI.setLocationRelativeTo(this);
+            pedidoGUI.setVisible(true);
+            
+            this.dispose(); // Cierra la ventana actual
+            
+        } else {
+            // Si el cliente NO existe:
+            javax.swing.JOptionPane.showMessageDialog(this, "Cliente no encontrado.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_IngresarBotonActionPerformed
 
     
@@ -123,42 +148,6 @@ public class IniciarVenta extends javax.swing.JFrame {
             return; // Detenemos la ejecución si está vacío
         }
     }//GEN-LAST:event_RutClienteTextFieldActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(IniciarVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(IniciarVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(IniciarVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(IniciarVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new IniciarVenta().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton IngresarBoton;

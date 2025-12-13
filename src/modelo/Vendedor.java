@@ -18,7 +18,6 @@ public class Vendedor extends Empleado {
         return rol;
     }
 
-
     @Override
     public String toString() {
         return nombre + " (ID: " + idEmpleado + ", Rol: " + rol + ")";

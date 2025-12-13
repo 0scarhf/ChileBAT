@@ -1,20 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package vista;
+import javax.swing.JOptionPane; // Necesario para mensajes de la GUI
+import controlador.*;
+import modelo.*;
 
-/**
- *
- * @author carva
- */
 public class GenerarPedido extends javax.swing.JFrame {
 
-    /**
-     * Creates new form GenerarVenta
-     */
-    public GenerarPedido() {
+    // 1. Atributos para almacenar las dependencias
+    private final ControladorSistemaVentas controlVentas;
+    private final Pedido pedidoActual; // El pedido que se acaba de iniciar
+    
+    // 2. Constructor MODIFICADO: Ahora acepta el Controlador y el Pedido
+    public GenerarPedido(ControladorSistemaVentas controlVentas, Pedido pedidoActual) {
+        this.controlVentas = controlVentas;
+        this.pedidoActual = pedidoActual;
         initComponents();
+        
+        // Cargar los tipos de recibo en el ComboBox (Factura/Boleta)
+        TipoReciboComboBox.removeAllItems();
+        TipoReciboComboBox.addItem(TipoDocumento.FACTURA.name());
+        TipoReciboComboBox.addItem(TipoDocumento.BOLETA.name());
     }
 
     /**
@@ -38,13 +42,17 @@ public class GenerarPedido extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
         jLabel1.setText("ID Producto");
 
-        IDProductoTextField.setText("jTextField1");
+        IDProductoTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                IDProductoTextFieldActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Cantidad");
-
-        CantidadTextField.setText("jTextField2");
 
         jLabel3.setText("Tipo recibo");
 
@@ -55,14 +63,18 @@ public class GenerarPedido extends javax.swing.JFrame {
             }
         });
 
-        EmitirComprobanteBoton.setText("Emitir Comprobante");
+        EmitirComprobanteBoton.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.default.focusedBorderColor"));
+        EmitirComprobanteBoton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        EmitirComprobanteBoton.setText("EMITIR COMPROBANTE");
         EmitirComprobanteBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 EmitirComprobanteBotonActionPerformed(evt);
             }
         });
 
-        jLabel4.setText("GENERAR PEDIDO");
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("REALIZAR PEDIDO");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -71,31 +83,32 @@ public class GenerarPedido extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(88, 88, 88)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(EmitirComprobanteBoton)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3))
-                                .addGap(40, 40, 40)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(CantidadTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(IDProductoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(TipoReciboComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addContainerGap()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(137, 137, 137)
-                        .addComponent(jLabel4)))
-                .addContainerGap(137, Short.MAX_VALUE))
+                        .addGap(74, 74, 74)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(CantidadTextField)
+                            .addComponent(IDProductoTextField)
+                            .addComponent(TipoReciboComboBox, 0, 179, Short.MAX_VALUE))
+                        .addGap(0, 60, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(119, 119, 119)
+                .addComponent(EmitirComprobanteBoton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(31, 31, 31)
+                .addGap(26, 26, 26)
                 .addComponent(jLabel4)
-                .addGap(52, 52, 52)
+                .addGap(35, 35, 35)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(IDProductoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -103,20 +116,20 @@ public class GenerarPedido extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(CantidadTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(TipoReciboComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                .addComponent(EmitirComprobanteBoton)
-                .addGap(28, 28, 28))
+                .addGap(21, 21, 21)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(TipoReciboComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addComponent(EmitirComprobanteBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -131,44 +144,73 @@ public class GenerarPedido extends javax.swing.JFrame {
     }//GEN-LAST:event_TipoReciboComboBoxActionPerformed
 
     private void EmitirComprobanteBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmitirComprobanteBotonActionPerformed
-        // TODO add your handling code here:
+
+        // 1. Capturar y validar entradas de la GUI
+        String idProductoStr = IDProductoTextField.getText().trim();
+        String cantidadStr = CantidadTextField.getText().trim();
+        String tipoReciboStr = (String) TipoReciboComboBox.getSelectedItem();
+
+        if (idProductoStr.isEmpty() || cantidadStr.isEmpty() || tipoReciboStr == null) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar ID, Cantidad y Tipo de Recibo.", "Error de Entrada", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int idProducto;
+        int cantidad;
+        try {
+            idProducto = Integer.parseInt(idProductoStr);
+            cantidad = Integer.parseInt(cantidadStr);
+            
+            // Regla de Negocio: Cantidad por Pallets/Cajas
+            if (cantidad <= 0) {
+                 JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a cero (Pallets/Cajas).", "Error de Cantidad", JOptionPane.ERROR_MESSAGE);
+                 return;
+            }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "ID o Cantidad deben ser números válidos.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // 2. Lógica de Adición de Producto y Descuento de Stock (DELEGACIÓN)
+        // El controlador valida stock, si es suficiente, descuenta (persiste) y actualiza el pedido.
+        boolean stockOk = controlVentas.agregarProducto(pedidoActual, idProducto, cantidad);
+
+        if (!stockOk) {
+            // El controlador devolvió false. Esto significa que el producto no existe o el stock es insuficiente.
+            JOptionPane.showMessageDialog(this, 
+                "ERROR: Producto ID " + idProducto + " no existe o el stock es insuficiente para " + cantidad + " unidades.", 
+                "Stock Insuficiente", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // 3. Emisión y Persistencia (DELEGACIÓN AL CONTROLADOR)
+        try {
+            // Convierte el String del ComboBox a TipoDocumento (Enum)
+            TipoDocumento tipoDoc = TipoDocumento.valueOf(tipoReciboStr); 
+            
+            // Llama al controlador para finalizar la venta (emite comprobante, guarda venta y guarda inventario)
+            Comprobante comprobanteGenerado = controlVentas.finalizarPedido(pedidoActual, tipoDoc);
+
+            JOptionPane.showMessageDialog(this, 
+                "Venta Finalizada con éxito.\nComprobante #" + comprobanteGenerado.getIdComprobante() + "\nTotal: $" + pedidoActual.getMontoTotal(), 
+                "Éxito", 
+                JOptionPane.INFORMATION_MESSAGE);
+            
+            // Se asume que no hay otra ventana de reporte, solo el mensaje de éxito.
+            this.dispose(); // Cierra la ventana GenerarPedido
+
+        } catch (Exception e) {
+            // En caso de error de I/O o cualquier fallo en la capa de persistencia/controlador
+            JOptionPane.showMessageDialog(this, "Error al finalizar el pedido: " + e.getMessage(), "Error Crítico", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_EmitirComprobanteBotonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GenerarPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GenerarPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GenerarPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GenerarPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
+    private void IDProductoTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDProductoTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_IDProductoTextFieldActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GenerarPedido().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField CantidadTextField;
