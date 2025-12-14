@@ -5,14 +5,16 @@ import java.util.Objects;
 public class Producto {
 
     private int idProducto;
+    private String nombre;
     private TipoMarca marca;
     private int valorUnitario;
     private int stock;
     private int stockMinimo;
 
-
-    public Producto(int id, TipoMarca marca, int valor, int stock, int stockMinimo) {
+    // CONSTRUCTOR PRINCIPAL ACTUALIZADO
+    public Producto(int id, String nombre, TipoMarca marca, int valor, int stock, int stockMinimo) {
         this.idProducto = id;
+        this.nombre = nombre;
         this.marca = marca;
         this.valorUnitario = valor;
         this.stock = stock;
@@ -21,19 +23,15 @@ public class Producto {
 
     public Producto(int idProducto) {
         this.idProducto = idProducto;
-        this.marca = marca;
+        this.nombre = "Desconocido";
+        this.marca = TipoMarca.GENERICO;
         this.valorUnitario = 0;
         this.stock = 0;
         this.stockMinimo = 0;
     }
 
-
     public boolean esStockCritico() {
         return stock <= stockMinimo;
-    }
-
-    public int obtenerPrecio() {
-        return valorUnitario;
     }
 
     public void restarStock(int cantidad) {
@@ -44,12 +42,17 @@ public class Producto {
         this.stock += cantidad;
     }
 
-
     public int getIdProducto() { return idProducto; }
-    public TipoMarca getMarca() { return marca; }
-    public int getStock() { return stock; }
-    public int getStockMinimo() { return stockMinimo; }
 
+    public String getNombre() { return nombre; } // Nuevo getter
+
+    public TipoMarca getMarca() { return marca; }
+
+    public int obtenerPrecio() { return valorUnitario; } // Mantenemos tu nombre, aunque getPrecio sería estándar
+
+    public int getStock() { return stock; }
+
+    public int getStockMinimo() { return stockMinimo; }
 
     @Override
     public boolean equals(Object o) {
@@ -64,9 +67,8 @@ public class Producto {
         return Objects.hash(idProducto);
     }
 
-
     @Override
     public String toString() {
-        return idProducto + " - " + marca;
+        return idProducto + " - " + nombre + " ($" + valorUnitario + ")";
     }
 }

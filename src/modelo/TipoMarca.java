@@ -1,11 +1,11 @@
 package modelo;
 public enum TipoMarca {
-    KENT_SILVER_NEO,
-    LUCKY_STRIKE_RED,
-    LUCKY_STRIKE_BLUE,
-    PALL_MALL_AZUL,
-    CAMEL_FILTERS,
-    GOLD_LEAF_ORIGINAL,
-    DUNHILL_INTERNATIONAL,
-    FILTROS_OCB_SLIM
+    GENERICO,
+    PALL_MALL,
+    LUCKY_STRIKE,
+    DUNHILL,
+    KENT,
+    CAMEL,
+    GOLD_LEAF,
+    OCB,
 }

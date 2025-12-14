@@ -67,53 +67,125 @@ public class PersistenciaDatos {
         return lista;
     }
 
-
     public static List<Producto> cargarProductos() {
         List<Producto> lista = new ArrayList<>();
+        File archivo = new File(PATH_PRODUCTOS);
 
-        try {
-            File archivo = new File(PATH_PRODUCTOS);
-            if (!archivo.exists()) {
+        // 1. Verificación inicial
+        if (!archivo.exists()) {
+            try {
                 archivo.createNewFile();
-                System.out.println("Archivo de productos no existía, se creó: " + PATH_PRODUCTOS);
-                return lista;
+                System.out.println("Archivo no existía, se creó: " + PATH_PRODUCTOS);
+            } catch (IOException e) {
+                System.out.println("Error creando archivo vacío: " + e.getMessage());
             }
+            return lista;
+        }
 
-            try (Scanner sc = new Scanner(archivo)) {
-                sc.useDelimiter("[;\\r\\n]+");
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            int numeroRegistro = 0;
 
-                int numeroRegistro = 0;
-                while (sc.hasNext()) {
-                    try {
-                        numeroRegistro++;
-                        int id = sc.nextInt();
-                        String nombre = sc.next().trim();
-                        int precio = sc.nextInt();
-                        int stock = sc.nextInt();
-                        int stockMin = sc.nextInt();
-                        
-                        String marcaBaseStr = nombre.split(" ")[0].trim();
-                        TipoMarca marcaEnum = TipoMarca.valueOf(marcaBaseStr.toUpperCase());
-                        
-                        lista.add(new Producto(id, marcaEnum, precio, stock, stockMin));
-                    } catch (NoSuchElementException e) {
-                        System.out.println("Advertencia: Registro " + numeroRegistro + " tiene formato incorrecto o datos faltantes, se omite.");
-                    } catch (NumberFormatException e) {
-                        System.out.println("Advertencia: Registro " + numeroRegistro + " tiene valores numéricos inválidos, se omite.");
+            while ((linea = br.readLine()) != null) {
+                numeroRegistro++;
+                if (linea.trim().isEmpty()) continue;
+
+                try {
+                    String[] partes = linea.split(";");
+
+                    if (partes.length < 5) {
+                        System.out.println("Advertencia: Línea " + numeroRegistro + " incompleta. Se omite.");
+                        continue;
                     }
+
+                    int id = Integer.parseInt(partes[0].trim());
+                    String nombre = partes[1].trim();
+                    int precio = Integer.parseInt(partes[2].trim());
+                    int stock = Integer.parseInt(partes[3].trim());
+                    int stockMin = Integer.parseInt(partes[4].trim());
+                    TipoMarca marcaEnum = determinarMarca(nombre);
+                    lista.add(new Producto(id, nombre, marcaEnum, precio, stock, stockMin));
+
+                } catch (NumberFormatException e) {
+                    System.out.println("Error de formato numérico en línea " + numeroRegistro + ": " + linea);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Error: Marca desconocida o datos inválidos en línea " + numeroRegistro + " (" + e.getMessage() + ")");
                 }
             }
-
-        } catch (FileNotFoundException e) {
-            System.out.println("Error: No se encontró el archivo de productos: " + PATH_PRODUCTOS);
         } catch (IOException e) {
-            System.out.println("Error de E/S al cargar productos: " + e.getMessage());
-        } catch (Exception e) {
-            System.out.println("Error inesperado cargando productos: " + e.getMessage());
+            System.out.println("Error leyendo el archivo: " + e.getMessage());
         }
 
         return lista;
     }
+
+    // Método auxiliar para manejar marcas compuestas (Pall Mall, Lucky Strike)
+    private static TipoMarca determinarMarca(String nombreProducto) {
+        String nombreMayus = nombreProducto.toUpperCase();
+
+        if (nombreMayus.startsWith("PALL MALL")) return TipoMarca.PALL_MALL;
+        if (nombreMayus.startsWith("LUCKY STRIKE")) return TipoMarca.LUCKY_STRIKE;
+        if (nombreMayus.startsWith("DUNHILL")) return TipoMarca.DUNHILL;
+        if (nombreMayus.startsWith("KENT")) return TipoMarca.KENT;
+        if (nombreMayus.startsWith("CAMEL")) return TipoMarca.CAMEL;
+        if (nombreMayus.startsWith("GOLD LEAF")) return TipoMarca.GOLD_LEAF;
+        if (nombreMayus.startsWith("FILTROS")) return TipoMarca.OCB;
+
+        try {
+            String primeraPalabra = nombreProducto.split(" ")[0].toUpperCase();
+            return TipoMarca.valueOf(primeraPalabra);
+        } catch (IllegalArgumentException e) {
+            return TipoMarca.GENERICO;
+        }
+    }
+
+
+//    public static List<Producto> cargarProductos() {
+//        List<Producto> lista = new ArrayList<>();
+//
+//        try {
+//            File archivo = new File(PATH_PRODUCTOS);
+//            if (!archivo.exists()) {
+//                archivo.createNewFile();
+//                System.out.println("Archivo de productos no existía, se creó: " + PATH_PRODUCTOS);
+//                return lista;
+//            }
+//
+//            try (Scanner sc = new Scanner(archivo)) {
+//                sc.useDelimiter("[;\\r\\n]+");
+//
+//                int numeroRegistro = 0;
+//                while (sc.hasNext()) {
+//                    try {
+//                        numeroRegistro++;
+//                        int id = sc.nextInt();
+//                        String nombre = sc.next().trim();
+//                        int precio = sc.nextInt();
+//                        int stock = sc.nextInt();
+//                        int stockMin = sc.nextInt();
+//
+//                        String marcaBaseStr = nombre.split(" ")[0].trim();
+//                        TipoMarca marcaEnum = TipoMarca.valueOf(marcaBaseStr.toUpperCase());
+//
+//                        lista.add(new Producto(id, marcaEnum, precio, stock, stockMin));
+//                    } catch (NoSuchElementException e) {
+//                        System.out.println("Advertencia: Registro " + numeroRegistro + " tiene formato incorrecto o datos faltantes, se omite.");
+//                    } catch (NumberFormatException e) {
+//                        System.out.println("Advertencia: Registro " + numeroRegistro + " tiene valores numéricos inválidos, se omite.");
+//                    }
+//                }
+//            }
+//
+//        } catch (FileNotFoundException e) {
+//            System.out.println("Error: No se encontró el archivo de productos: " + PATH_PRODUCTOS);
+//        } catch (IOException e) {
+//            System.out.println("Error de E/S al cargar productos: " + e.getMessage());
+//        } catch (Exception e) {
+//            System.out.println("Error inesperado cargando productos: " + e.getMessage());
+//        }
+//
+//        return lista;
+//    }
 
 
     public static List<Pedido> cargarVentas(ControladorInventario inventarioCtrl) {

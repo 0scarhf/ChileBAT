@@ -26,24 +26,28 @@ public class VerInventario extends javax.swing.JFrame {
     }
 
     private void inicializarTabla() {
-        // 1. Definir las columnas
+        // 1. Definir las columnas (Esto estaba bien)
         DefaultTableModel model = new DefaultTableModel(
-            new Object[]{"ID", "Nombre", "Marca", "Precio", "Stock", "Stock Mínimo"}, 0
+                new Object[]{"ID", "Nombre", "Marca", "Precio", "Stock", "Stock Mínimo"}, 0
         );
         InventarioTabla.setModel(model);
 
         // 2. Cargar datos
-        List<Producto> lista = controlInv.obtenerInventario(); 
-        
+        List<Producto> lista = controlInv.obtenerInventario();
+
         for (Producto p : lista) {
+            // CORRECCIÓN AQUÍ: Agregamos p.getNombre() y p.getStockMinimo()
+            // y aseguramos que el orden coincida con los encabezados de arriba.
             model.addRow(new Object[]{
-                p.getIdProducto(),
-                p.getMarca(), 
-                p.obtenerPrecio(),
-                p.getStock(),
+                    p.getIdProducto(),    // Columna 1: ID
+                    p.getNombre(),        // Columna 2: Nombre (¡Esto faltaba!)
+                    p.getMarca(),         // Columna 3: Marca
+                    p.obtenerPrecio(),    // Columna 4: Precio
+                    p.getStock(),         // Columna 5: Stock
+                    p.getStockMinimo()    // Columna 6: Stock Mínimo (¡Esto faltaba!)
             });
         }
-        
+
         // 3. Inicializar el sorter para habilitar el filtrado
         sorter = new TableRowSorter<>(model);
         InventarioTabla.setRowSorter(sorter);

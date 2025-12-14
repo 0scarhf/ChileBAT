@@ -1,4 +1,3 @@
-RUT,Nombre,DirecciÃ³n,Tipo
 66245101-2,Comercializadora Norte,Las Rosas 368,Distribuidor
 28871440-6,AlmacÃ©n El Sol,Av. Central 130,Minorista
 13352959-0,Distribuidora Norte,Av. Los Andes 1698,Distribuidor
