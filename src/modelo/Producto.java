@@ -54,6 +54,17 @@ public class Producto {
 
     public int getStockMinimo() { return stockMinimo; }
 
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public void setValorUnitario(int valorUnitario) {
+        this.valorUnitario = valorUnitario;
+    }
+
+    public void setStockMinimo(int stockMinimo) {
+        this.stockMinimo = stockMinimo;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

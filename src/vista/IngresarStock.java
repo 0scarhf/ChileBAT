@@ -1,218 +1,210 @@
 package vista;
-import controlador.*;
-import modelo.*;
-import javax.swing.JOptionPane;
 
-public class IngresarStock extends javax.swing.JFrame {
-    
-    private final ControladorInventario controlInv;
-    
+import controlador.ControladorInventario;
+import modelo.Producto;
+import modelo.TipoMarca;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
+public class IngresarStock extends JFrame {
+    private ControladorInventario controlInv;
+    private JPanel panel1;
+    private JButton INGRESARButton;
+    private JButton CANCELARButton;
+    private JComboBox<String> comboBox1Marca;
+    private JComboBox<String> comboBox2Producto;
+    private JTextField textField1ID;
+    private JLabel IDLabel;
+    private JButton NUEVOPRODUCTOButton;
+    private JTextField textField1Cantidad;
+    private JLabel Titulo;
+    private Producto productoSeleccionado = null;
+
     public IngresarStock(ControladorInventario controlInv) {
-        this.controlInv = controlInv; 
-        initComponents();
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        
-        // Cargar las Marcas en el ComboBox
-        MarcajComboBox.removeAllItems();
-        for (TipoMarca marca : TipoMarca.values()) {
-            MarcajComboBox.addItem(marca.name());
+        this.controlInv = controlInv;
+        setContentPane(panel1);
+        setSize(500, 400);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        Titulo.setText("INGRESAR STOCK DE PRODUCTOS");
+        setTitle("Ingreso de Stock");
+        cargarMarcasEnCombo();
+
+        //EVENTOS (LISTENERS)
+        comboBox1Marca.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarProductosDeLaMarca();
+            }
+        });
+
+        comboBox2Producto.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mostrarIDDelProducto();
+            }
+        });
+
+        INGRESARButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                guardarStock();
+            }
+        });
+
+        CANCELARButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+
+        textField1ID.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarYSeleccionarPorID();
+            }
+        });
+
+        NUEVOPRODUCTOButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                NuevoProducto ventanaCrear = new NuevoProducto(controlInv);
+                ventanaCrear.setVisible(true);
+                dispose();
+            }
+        });
+
+        setVisible(true);
+    }
+
+    private void buscarYSeleccionarPorID() {
+        String textoID = textField1ID.getText().trim();
+        if (textoID.isEmpty()) {
+            return;
+        }
+
+        try {
+            int idBuscado = Integer.parseInt(textoID);
+            Producto p = controlInv.buscarProducto(idBuscado);
+
+            if (p != null) {
+                productoSeleccionado = p;
+                String nombreMarca = obtenerTextoMarca(p.getMarca());
+                comboBox1Marca.setSelectedItem(nombreMarca);
+                comboBox2Producto.setSelectedItem(p.getNombre());
+                textField1Cantidad.requestFocus();
+
+            } else {
+                //! ERROR: ID NO ENCONTRADO
+                JOptionPane.showMessageDialog(this,
+                        "ID Inválida: No existe un producto con el ID " + idBuscado,
+                        "Error de Búsqueda",
+                        JOptionPane.WARNING_MESSAGE);
+                textField1ID.selectAll();
+            }
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "El ID debe ser un número entero.", "Formato Incorrecto", JOptionPane.ERROR_MESSAGE);
         }
     }
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        IDProductoTextField = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        CantidadAIngresarTextField = new javax.swing.JTextField();
-        BotonIngresar = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
-        MarcajComboBox = new javax.swing.JComboBox<>();
+    private void cargarMarcasEnCombo() {
+        comboBox1Marca.removeAllItems();
+        comboBox1Marca.addItem("Seleccione una marca...");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("INGRESAR STOCK");
-
-        jLabel2.setText("ID Producto:");
-
-        IDProductoTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IDProductoTextFieldActionPerformed(evt);
+        for (TipoMarca marca : TipoMarca.values()) {
+            if (marca != TipoMarca.GENERICO) {
+                comboBox1Marca.addItem(obtenerTextoMarca(marca));
             }
-        });
+        }
+    }
 
-        jLabel3.setText("Cantidad a Ingresar:");
+    private void cargarProductosDeLaMarca() {
+        comboBox2Producto.removeAllItems();
+        textField1ID.setText("");
+        productoSeleccionado = null;
 
-        BotonIngresar.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.default.focusedBorderColor"));
-        BotonIngresar.setText("INGRESAR");
-        BotonIngresar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        BotonIngresar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BotonIngresarActionPerformed(evt);
-            }
-        });
+        String marcaSeleccionada = (String) comboBox1Marca.getSelectedItem();
 
-        jLabel4.setText("Marca:");
-
-        MarcajComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        MarcajComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MarcajComboBoxActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(IDProductoTextField)
-                    .addComponent(CantidadAIngresarTextField)
-                    .addComponent(MarcajComboBox, 0, 199, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(129, Short.MAX_VALUE)
-                .addComponent(BotonIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(129, 129, 129))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(IDProductoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(CantidadAIngresarTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(MarcajComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-                .addComponent(BotonIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void IDProductoTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDProductoTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_IDProductoTextFieldActionPerformed
-
-    private void BotonIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonIngresarActionPerformed
-        // 1. Capturar y validar entradas de la GUI
-        String idProductoStr = IDProductoTextField.getText().trim();
-        String cantidadStr = CantidadAIngresarTextField.getText().trim();
-        String marcaStr = (String) MarcajComboBox.getSelectedItem();
-
-        if (idProductoStr.isEmpty() || cantidadStr.isEmpty() || marcaStr == null) {
-            JOptionPane.showMessageDialog(this, "Debe ingresar ID, Cantidad y seleccionar una Marca.", "Error de Entrada", JOptionPane.ERROR_MESSAGE);
+        if (marcaSeleccionada == null || marcaSeleccionada.equals("Seleccione una marca...")) {
             return;
         }
 
-        int idProducto;
-        int cantidad;
-        try {
-            idProducto = Integer.parseInt(idProductoStr);
-            cantidad = Integer.parseInt(cantidadStr);
-            
-            if (cantidad <= 0) {
-                 JOptionPane.showMessageDialog(this, "La cantidad a ingresar debe ser positiva.", "Error de Cantidad", JOptionPane.ERROR_MESSAGE);
-                 return;
+
+        List<Producto> lista = controlInv.obtenerInventario();
+        for (Producto p : lista) {
+            if (obtenerTextoMarca(p.getMarca()).equals(marcaSeleccionada)) comboBox2Producto.addItem(p.getNombre());
+        }
+    }
+
+    private void mostrarIDDelProducto() {
+        String nombreProducto = (String) comboBox2Producto.getSelectedItem();
+
+        if (nombreProducto == null) return;
+
+        // Buscar el objeto producto real basado en el nombre
+        List<Producto> lista = controlInv.obtenerInventario();
+        for (Producto p : lista) {
+            if (p.getNombre().equals(nombreProducto)) {
+                productoSeleccionado = p; // ¡Lo encontramos!
+                textField1ID.setText(String.valueOf(p.getIdProducto()));
+                return;
             }
+        }
+    }
+
+    private void guardarStock() {
+        if (productoSeleccionado == null) {
+            JOptionPane.showMessageDialog(this, "Por favor seleccione un producto.");
+            return;
+        }
+
+        String textoCantidad = textField1Cantidad.getText();
+        if (textoCantidad.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese una cantidad.");
+            return;
+        }
+
+        try {
+            int cantidadASumar = Integer.parseInt(textoCantidad);
+
+            if (cantidadASumar <= 0) {
+                JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a 0.");
+                return;
+            }
+
+            int nuevoStock = productoSeleccionado.getStock() + cantidadASumar;
+            productoSeleccionado.setStock(nuevoStock);
+
+            controlInv.actualizarProducto(productoSeleccionado);
+
+            JOptionPane.showMessageDialog(this, "Stock actualizado exitosamente.\nNuevo stock: " + nuevoStock);
+
+            textField1Cantidad.setText("");
 
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "ID y Cantidad deben ser números válidos.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
-            return;
+            JOptionPane.showMessageDialog(this, "La cantidad debe ser un número entero.");
         }
+    }
 
-        // 2. Búsqueda y Validación de Existencia (DELEGACIÓN)
-        Producto productoExistente = controlInv.buscarProducto(idProducto);
-        
-        if (productoExistente == null) {
-            // Caso 1: ID no existe
-            JOptionPane.showMessageDialog(this, 
-                "ERROR: No existe ningún producto con el ID " + idProducto + " para reponer stock.", 
-                "ID Inválido", 
-                JOptionPane.ERROR_MESSAGE);
-            return;
+    private String obtenerTextoMarca(TipoMarca marca) {
+        if (marca == null) return "";
+
+        switch (marca) {
+            case PALL_MALL:   return "Pall Mall";
+            case LUCKY_STRIKE: return "Lucky Strike";
+            case GOLD_LEAF:   return "Gold Leaf";
+            case DUNHILL:     return "Dunhill";
+            case KENT:        return "Kent";
+            case CAMEL:       return "Camel";
+            case OCB:         return "OCB";
+            case GENERICO:    return "Genérico";
+            default:          return marca.toString();
         }
-        
-        // 3. Validación de TipoMarca (Regla de Negocio: debe coincidir con el producto existente)
-        // Obtenemos la marca del producto existente para comparar con lo que seleccionó el usuario.
-        if (!productoExistente.getMarca().name().equalsIgnoreCase(marcaStr)) {
-            JOptionPane.showMessageDialog(this, 
-                "ERROR: La marca seleccionada (" + marcaStr + ") no coincide con la marca registrada para este ID (" + productoExistente.getMarca().name() + ").", 
-                "Error de Marca", 
-                JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    }
 
-        // 4. Delegación al Controlador para Ingresar Stock
-        // La función ingresarStock() se encarga de aumentar el stock y guardar los datos.
-        boolean ok = controlInv.ingresarStock(idProducto, cantidad);
-        
-        if (ok) {
-            // Éxito:
-            JOptionPane.showMessageDialog(this, 
-                "Stock de " + productoExistente.getMarca().name() + " actualizado con éxito.\nCantidad ingresada: " + cantidad, 
-                "Éxito", 
-                JOptionPane.INFORMATION_MESSAGE);
-            
-            // Limpiar campos para la siguiente entrada
-            IDProductoTextField.setText("");
-            CantidadAIngresarTextField.setText("");
-            
-        } else {
-             // Fallo Interno (poco probable si las validaciones previas pasaron)
-             JOptionPane.showMessageDialog(this, "Fallo desconocido al actualizar el stock.", "Error Interno", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_BotonIngresarActionPerformed
-
-    private void MarcajComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MarcajComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_MarcajComboBoxActionPerformed
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton BotonIngresar;
-    private javax.swing.JTextField CantidadAIngresarTextField;
-    private javax.swing.JTextField IDProductoTextField;
-    private javax.swing.JComboBox<String> MarcajComboBox;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JPanel jPanel1;
-    // End of variables declaration//GEN-END:variables
 }

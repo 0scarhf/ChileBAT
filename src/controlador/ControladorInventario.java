@@ -19,13 +19,28 @@ public class ControladorInventario {
             this.inventario.put(p.getIdProducto(), p);
         }
     }
-    
-    // Método privado para validar parámetros comunes (DRY)
+
     private boolean validarProductoYCantidad(Producto producto, int cantidad) {
         if (producto == null || cantidad <= 0) {
             return false;
         }
         return true;
+    }
+
+    //METODO PARA VERIFICAR NOMBRE DUPLICADO
+    public boolean existeProductoConNombre(String nombreBuscado) {
+        for (Producto p : inventario.values()) {
+            if (p.getNombre().equalsIgnoreCase(nombreBuscado)) {
+                return true;
+            }
+        }
+        return false; // No existe
+    }
+
+    //METODO PARA IngresarStock (GUI)
+    public void actualizarProducto(Producto p) {
+        inventario.put(p.getIdProducto(), p);
+        guardarInventario();
     }
 
     // OBTENER INVENTARIO
