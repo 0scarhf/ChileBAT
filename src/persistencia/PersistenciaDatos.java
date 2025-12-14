@@ -119,74 +119,28 @@ public class PersistenciaDatos {
         return lista;
     }
 
-    // Método auxiliar para manejar marcas compuestas (Pall Mall, Lucky Strike)
+    //! Metodo auxiliar para manejar marcas (Pall Mall, Lucky Strike)
     private static TipoMarca determinarMarca(String nombreProducto) {
-        String nombreMayus = nombreProducto.toUpperCase();
+        if(nombreProducto == null || nombreProducto.isEmpty()) return TipoMarca.GENERICO ;
+        String textoMayuscula = nombreProducto.toUpperCase();
 
-        if (nombreMayus.startsWith("PALL MALL")) return TipoMarca.PALL_MALL;
-        if (nombreMayus.startsWith("LUCKY STRIKE")) return TipoMarca.LUCKY_STRIKE;
-        if (nombreMayus.startsWith("DUNHILL")) return TipoMarca.DUNHILL;
-        if (nombreMayus.startsWith("KENT")) return TipoMarca.KENT;
-        if (nombreMayus.startsWith("CAMEL")) return TipoMarca.CAMEL;
-        if (nombreMayus.startsWith("GOLD LEAF")) return TipoMarca.GOLD_LEAF;
-        if (nombreMayus.startsWith("FILTROS")) return TipoMarca.OCB;
+        if (textoMayuscula.contains("PALL MAN")) return TipoMarca.PALL_MALL;
+        if (textoMayuscula.contains("FILTROS")) return TipoMarca.OCB;
+        for (TipoMarca marca : TipoMarca.values()) {
+            if (marca == TipoMarca.GENERICO) continue;
 
-        try {
-            String primeraPalabra = nombreProducto.split(" ")[0].toUpperCase();
-            return TipoMarca.valueOf(primeraPalabra);
-        } catch (IllegalArgumentException e) {
-            return TipoMarca.GENERICO;
+            String nombreMarca = marca.name().replace("_", " ");
+
+            if (textoMayuscula.contains(nombreMarca)) {
+                return marca;
+            }
         }
+
+        if (textoMayuscula.contains("LUCKY")) return TipoMarca.LUCKY_STRIKE;
+        if (textoMayuscula.contains("GOLD")) return TipoMarca.GOLD_LEAF;
+
+        return TipoMarca.GENERICO;
     }
-
-
-//    public static List<Producto> cargarProductos() {
-//        List<Producto> lista = new ArrayList<>();
-//
-//        try {
-//            File archivo = new File(PATH_PRODUCTOS);
-//            if (!archivo.exists()) {
-//                archivo.createNewFile();
-//                System.out.println("Archivo de productos no existía, se creó: " + PATH_PRODUCTOS);
-//                return lista;
-//            }
-//
-//            try (Scanner sc = new Scanner(archivo)) {
-//                sc.useDelimiter("[;\\r\\n]+");
-//
-//                int numeroRegistro = 0;
-//                while (sc.hasNext()) {
-//                    try {
-//                        numeroRegistro++;
-//                        int id = sc.nextInt();
-//                        String nombre = sc.next().trim();
-//                        int precio = sc.nextInt();
-//                        int stock = sc.nextInt();
-//                        int stockMin = sc.nextInt();
-//
-//                        String marcaBaseStr = nombre.split(" ")[0].trim();
-//                        TipoMarca marcaEnum = TipoMarca.valueOf(marcaBaseStr.toUpperCase());
-//
-//                        lista.add(new Producto(id, marcaEnum, precio, stock, stockMin));
-//                    } catch (NoSuchElementException e) {
-//                        System.out.println("Advertencia: Registro " + numeroRegistro + " tiene formato incorrecto o datos faltantes, se omite.");
-//                    } catch (NumberFormatException e) {
-//                        System.out.println("Advertencia: Registro " + numeroRegistro + " tiene valores numéricos inválidos, se omite.");
-//                    }
-//                }
-//            }
-//
-//        } catch (FileNotFoundException e) {
-//            System.out.println("Error: No se encontró el archivo de productos: " + PATH_PRODUCTOS);
-//        } catch (IOException e) {
-//            System.out.println("Error de E/S al cargar productos: " + e.getMessage());
-//        } catch (Exception e) {
-//            System.out.println("Error inesperado cargando productos: " + e.getMessage());
-//        }
-//
-//        return lista;
-//    }
-
 
     public static List<Pedido> cargarVentas(ControladorInventario inventarioCtrl) {
         List<Pedido> ventas = new ArrayList<>();
@@ -293,10 +247,10 @@ public class PersistenciaDatos {
                 for (Producto p : lista) {
                     pw.println(
                             p.getIdProducto() + ";" +
-                                    p.getMarca()+ ";" +
-                                    p.obtenerPrecio() + ";" +
-                                    p.getStock() + ";" +
-                                    p.getStockMinimo()
+                            p.getNombre()+ ";" +
+                            p.obtenerPrecio() + ";" +
+                            p.getStock() + ";" +
+                            p.getStockMinimo()
                     );
                 }
             }

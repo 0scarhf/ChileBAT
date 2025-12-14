@@ -48,7 +48,7 @@ public class Producto {
 
     public TipoMarca getMarca() { return marca; }
 
-    public int obtenerPrecio() { return valorUnitario; } // Mantenemos tu nombre, aunque getPrecio sería estándar
+    public int obtenerPrecio() { return valorUnitario; }
 
     public int getStock() { return stock; }
 

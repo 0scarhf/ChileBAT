@@ -1,9 +1,12 @@
-
 package vista;
 import controlador.ControladorInventario;
 import modelo.Producto;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 /**
@@ -13,44 +16,135 @@ import javax.swing.table.TableRowSorter;
 public class VerInventario extends javax.swing.JFrame {
 
     private final ControladorInventario controlInv;
-    
     private TableRowSorter<DefaultTableModel> sorter;
-    
     private javax.swing.JTable inventarioTable;
+    private javax.swing.JComboBox<String> cmbFiltroMarca;
+    private javax.swing.JTextField BuscarPorIDjTextField;
     
     public VerInventario(ControladorInventario controlInv) {
         this.controlInv = controlInv;
         initComponents();
+        this.setSize(700, 600);
+        this.setLocationRelativeTo(null);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         inicializarTabla();
+        configurarFiltroMarca();
+    }
+
+    private void configurarFiltroMarca() {
+        cmbFiltroMarca.removeAllItems();
+        cmbFiltroMarca.addItem("Todas las marcas");
+
+        java.util.Set<String> marcasUnicas = new java.util.HashSet<>();
+        List<Producto> lista = controlInv.obtenerInventario();
+
+        for (Producto p : lista) {
+            String nombreMarca = obtenerTextoMarca(p);
+
+            if (!nombreMarca.isEmpty()) {
+                marcasUnicas.add(nombreMarca);
+            }
+        }
+
+        for (String marca : marcasUnicas) {
+            cmbFiltroMarca.addItem(marca);
+        }
+    }
+
+
+    private String obtenerTextoMarca(Producto p) {
+        if (p.getMarca() == null) {
+            return "Sin Marca";
+        }
+
+        switch (p.getMarca()) {
+            case PALL_MALL:
+                return "Pall Mall";
+
+            case LUCKY_STRIKE:
+                return "Lucky Strike";
+
+            case GOLD_LEAF:
+                return "Gold Leaf";
+
+            case DUNHILL:
+                return "Dunhill";
+
+            case KENT:
+                return "Kent";
+
+            case CAMEL:
+                return "Camel";
+
+            case OCB:
+                return "OCB";
+
+            case GENERICO:
+                return "Genérico";
+
+            default:
+                return p.getMarca().toString();
+        }
     }
 
     private void inicializarTabla() {
         // 1. Definir las columnas (Esto estaba bien)
         DefaultTableModel model = new DefaultTableModel(
                 new Object[]{"ID", "Nombre", "Marca", "Precio", "Stock", "Stock Mínimo"}, 0
-        );
+        ){
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 3) return Double.class; // Precio
+                if (columnIndex == 0 || columnIndex == 4 || columnIndex == 5) return Integer.class; // ID y Stocks
+                return String.class;
+            }
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         InventarioTabla.setModel(model);
 
-        // 2. Cargar datos
         List<Producto> lista = controlInv.obtenerInventario();
-
         for (Producto p : lista) {
-            // CORRECCIÓN AQUÍ: Agregamos p.getNombre() y p.getStockMinimo()
-            // y aseguramos que el orden coincida con los encabezados de arriba.
             model.addRow(new Object[]{
-                    p.getIdProducto(),    // Columna 1: ID
-                    p.getNombre(),        // Columna 2: Nombre (¡Esto faltaba!)
-                    p.getMarca(),         // Columna 3: Marca
-                    p.obtenerPrecio(),    // Columna 4: Precio
-                    p.getStock(),         // Columna 5: Stock
-                    p.getStockMinimo()    // Columna 6: Stock Mínimo (¡Esto faltaba!)
+                    p.getIdProducto(),
+                    p.getNombre(),
+                    obtenerTextoMarca(p),
+                    p.obtenerPrecio(),
+                    p.getStock(),
+                    p.getStockMinimo()
             });
         }
 
-        // 3. Inicializar el sorter para habilitar el filtrado
         sorter = new TableRowSorter<>(model);
         InventarioTabla.setRowSorter(sorter);
+
+        javax.swing.table.TableColumnModel columnModel = InventarioTabla.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(50);
+        columnModel.getColumn(1).setPreferredWidth(200);
+        columnModel.getColumn(2).setPreferredWidth(100);
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        InventarioTabla.getColumnModel().getColumn(0).setCellRenderer(centerRenderer); // ID
+        InventarioTabla.getColumnModel().getColumn(4).setCellRenderer(centerRenderer); // Stock
+        InventarioTabla.getColumnModel().getColumn(5).setCellRenderer(centerRenderer); // Stock Min
+
+        DefaultTableCellRenderer precioRenderer = new DefaultTableCellRenderer() {
+            @Override
+            protected void setValue(Object value) {
+                if (value instanceof Number) {
+                    setText("$ " + value.toString());
+                } else {
+                    super.setValue(value);
+                }
+            }
+        };
+
+        precioRenderer.setHorizontalAlignment(JLabel.CENTER);
+        InventarioTabla.getColumnModel().getColumn(3).setCellRenderer(precioRenderer);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -69,90 +163,81 @@ public class VerInventario extends javax.swing.JFrame {
         BuscarPorIDjTextField = new javax.swing.JTextField();
         BuscarBoton = new javax.swing.JButton();
 
+        cmbFiltroMarca = new javax.swing.JComboBox<>();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        // Panel Principal
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        InventarioTabla.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "ID", "Nombre", "Valor", "Stock"
-            }
-        ));
+        jPanel1.setLayout(new java.awt.BorderLayout(10, 10));
+        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 30, 20, 30));
         jScrollPane1.setViewportView(InventarioTabla);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        // Título
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("LISTADO DE INVENTARIO");
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 30, 10, 30));
+
+        // Panel de busqueda ID
+        javax.swing.JPanel panelBusqueda = new javax.swing.JPanel();
+        panelBusqueda.setBackground(new java.awt.Color(255, 255, 255));
+        panelBusqueda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 15, 10));
 
         jLabel2.setText("INGRESAR ID:");
+        panelBusqueda.add(jLabel2);
 
-        BuscarPorIDjTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BuscarPorIDjTextFieldActionPerformed(evt);
-            }
-        });
+        BuscarPorIDjTextField.setColumns(15);
+        panelBusqueda.add(BuscarPorIDjTextField);
 
         BuscarBoton.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.default.focusColor"));
-        BuscarBoton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        BuscarBoton.setFont(new java.awt.Font("Segoe UI", 1, 12));
         BuscarBoton.setText("BUSCAR");
-        BuscarBoton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BuscarBotonActionPerformed(evt);
-            }
-        });
+        panelBusqueda.add(BuscarBoton);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(56, 56, 56)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(BuscarPorIDjTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(BuscarBoton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(24, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(BuscarBoton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(BuscarPorIDjTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        // NUEVO PANEL PARA FILTRAR POR MARCA
+        javax.swing.JPanel panelMarca = new javax.swing.JPanel();
+        panelMarca.setBackground(new java.awt.Color(255, 255, 255));
+        panelMarca.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 15, 5));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        javax.swing.JLabel lblMarca = new javax.swing.JLabel("FILTRAR POR MARCA:");
+        panelMarca.add(lblMarca);
 
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
+        cmbFiltroMarca.setPreferredSize(new java.awt.Dimension(200, 25));
+        panelMarca.add(cmbFiltroMarca);
+
+        // Panel Superior
+        javax.swing.JPanel panelSuperior = new javax.swing.JPanel();
+        panelSuperior.setBackground(new java.awt.Color(255, 255, 255));
+
+        panelSuperior.setLayout(new java.awt.GridLayout(3, 1));
+
+        panelSuperior.add(jLabel1);       // Fila 1
+        panelSuperior.add(panelBusqueda); // Fila 2
+        panelSuperior.add(panelMarca);    // Fila 3 (NUEVA)
+
+        jPanel1.add(panelSuperior, java.awt.BorderLayout.NORTH);
+        jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(jPanel1);
+
+        BuscarPorIDjTextField.addActionListener(evt -> BuscarPorIDjTextFieldActionPerformed(evt));
+        BuscarBoton.addActionListener(evt -> BuscarBotonActionPerformed(evt));
+        cmbFiltroMarca.addActionListener(evt -> filtrarPorMarca());
+
+    }
+
+    private void filtrarPorMarca() {
+        String marcaSeleccionada = (String) cmbFiltroMarca.getSelectedItem();
+
+        BuscarPorIDjTextField.setText("");
+
+        if (marcaSeleccionada == null || marcaSeleccionada.equals("Todas las marcas")) {
+            sorter.setRowFilter(null); // Mostrar todo
+        } else {
+            sorter.setRowFilter(javax.swing.RowFilter.regexFilter("^" + marcaSeleccionada + "$", 2));
+        }
+    }
 
     private void BuscarPorIDjTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarPorIDjTextFieldActionPerformed
         filtrarTablaPorID();
@@ -180,7 +265,6 @@ public class VerInventario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BuscarBoton;
-    private javax.swing.JTextField BuscarPorIDjTextField;
     private javax.swing.JTable InventarioTabla;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

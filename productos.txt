@@ -1,11 +1,55 @@
-101;CIGARRILLOS PALL MALL AZUL;4800;50;10
-111;PALL MALL ROJO;4800;40;10
-102;DUNHILL ;6500;20;5
-103;KENT;5200;12;10
-200;OCB;1500;100;20
-201;LUCKY_STRIKE;5000;60;10
-202;LUCKY_STRIKE;5000;40;10
-203;CAMEL;4300;70;15
-204;GOLD_LEAF;3900;30;10
-301;PALL_MALL;4900;45;10
-302;KENT;5300;25;8
+101;Cigarrillos Pall Man Azul 20;4800;50;10
+102;Cigarrillos Pall Man Rojos 20;4800;40;10
+103;Pall Mall Click Mentol 20;4900;35;5
+104;Pall Mall Silver 20;4800;20;5
+105;Pall Mall Blanco 20;4800;15;5
+106;Pall Man Click Naranja;4900;25;5
+107;Pall Mall XL 20;5000;30;8
+108;Pall Mall Nanokings Blue;4700;12;5
+109;Pall Mall Nanokings Red;4700;10;5
+110;Cigarrillos Pall Man Double Click;5000;18;5
+201;Lucky Strike Red Box 20;5500;60;15
+202;Lucky Strike Blue Box 20;5200;45;10
+203;Cigarrillos Lucky Strike Double Click;5600;30;8
+204;Lucky Strike Wild Mint;5600;25;5
+205;Lucky Strike Click 4 Mix;5800;20;5
+206;Lucky Strike Convertibles;5700;15;5
+207;Lucky Strike Flow Filter;5300;40;10
+208;Lucky Strike Original Red Soft;5000;20;5
+209;Lucky Strike Dark Green;5600;10;2
+210;Cigarrillos Lucky Strike Crisp;5600;12;2
+301;Kent Silver Neo 4;5600;25;5
+302;Cigarrillos Kent Core Blue;5400;15;5
+303;Kent Switch 20;5800;40;10
+304;Kent HD White;5500;20;5
+305;Kent Nanotek Black;5700;10;2
+306;Kent Blue Futura;5400;18;5
+307;Cigarrillos Kent Ice Switch;5800;22;5
+401;Dunhill International Red;6800;10;3
+402;Cigarrillos Dunhill Fine Cut Black;6500;12;4
+403;Dunhill Blonde Blend;6600;8;2
+404;Dunhill Switch;6700;15;3
+405;Dunhill Master Blend;7000;5;1
+501;Camel Filters Yellow;5200;55;10
+502;Cigarrillos Camel Blue;5200;48;10
+503;Camel Activa Fresh;5300;20;5
+504;Camel Essential Blue;5000;30;10
+505;Camel Essential Flavor;5000;25;10
+506;Camel Compact Filters;5100;15;5
+601;Gold Leaf Original 20;4200;30;10
+602;Cigarrillos Gold Leaf Blue;4000;25;10
+603;Gold Leaf Click;4300;20;5
+701;Filtros OCB Slim 6mm;1500;100;20
+702;Filtros OCB Regular 8mm;1400;80;15
+703;Papel OCB Premium Negro;1200;150;25
+704;Papel OCB Organic Hemp;1600;50;10
+705;Papel OCB X-Pert Blue;1300;60;10
+706;Filtros OCB Virgin;1600;40;10
+707;Tubos OCB para rellenar;2500;10;2
+801;Encendedor Bic Grande;1000;50;10
+802;Encendedor Bic Chico;800;40;10
+803;Encendedor Clipper;1500;30;5
+804;Tabaco Suelto Cerrito;3500;15;5
+805;Tabaco Van Haasen;4500;10;2
+806;Chicles Mentos Mint;500;100;20
+807;Pilas AA Duracell Par;2500;20;5
