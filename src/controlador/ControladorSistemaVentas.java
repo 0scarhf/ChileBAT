@@ -102,10 +102,27 @@ public class ControladorSistemaVentas {
         return comprobante;
     }
 
-    // =================
-    // MÉTODOS EXTRAS
-    // =================
+    public boolean agregarCliente(String rut, String nombre, String direccion, String tipo) {
+        if (rut == null || rut.isBlank() || nombre == null || nombre.isBlank() ||
+                direccion == null || direccion.isBlank() || tipo == null || tipo.isBlank()) {
+            return false;
+        }
+        if (buscarCliente(rut) != null) {
+            return false;
+        }
+        Distribuidor nuevo = new Distribuidor(
+                rut.trim(),
+                nombre.trim(),
+                direccion.trim(),
+                tipo.trim()
+        );
+        clientes.add(nuevo);
+        PersistenciaDatos.guardarClientes(clientes);
 
+        return true;
+    }
+
+    // MÉTODOS EXTRAS
     private int generarIdPedido() {
         return (int)(System.currentTimeMillis() % 100000); 
     }

@@ -67,7 +67,6 @@ public class PersistenciaDatos {
         return lista;
     }
 
-
     public static List<Producto> cargarProductos() {
         List<Producto> lista = new ArrayList<>();
 
@@ -294,4 +293,29 @@ public class PersistenciaDatos {
             System.out.println("Error inesperado guardando comprobante: " + e.getMessage());
         }
     }
+
+    public static void guardarClientes(List<Distribuidor> lista) {
+        try {
+            File archivo = new File(PATH_CLIENTES);
+            if (!archivo.exists()) {
+                archivo.createNewFile();
+            }
+
+            try (PrintWriter pw = new PrintWriter(new FileWriter(archivo))) {
+                for (Distribuidor d : lista) {
+                    pw.println(
+                            d.getRut() + "," +
+                                    d.getNombre() + "," +
+                                    d.getDireccion() + "," +
+                                    d.getTipo()
+                    );
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error al guardar clientes: " + e.getMessage());
+        }
+    }
+
+
 }
