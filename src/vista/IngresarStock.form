@@ -31,7 +31,7 @@
                   </grid>
                 </constraints>
                 <properties>
-                  <text value="INGRESAR"/>
+                  <text value="Ingresar"/>
                 </properties>
               </component>
               <component id="16f97" class="javax.swing.JButton" binding="CANCELARButton" default-binding="true">
@@ -41,7 +41,7 @@
                   </grid>
                 </constraints>
                 <properties>
-                  <text value="CANCELAR"/>
+                  <text value="Cancelar"/>
                 </properties>
               </component>
             </children>
@@ -146,7 +146,7 @@
               </grid>
             </constraints>
             <properties>
-              <text value="INGRESAR NUEVO PRODUCTO"/>
+              <text value="Ingresar Nuevo Producto"/>
             </properties>
           </component>
         </children>

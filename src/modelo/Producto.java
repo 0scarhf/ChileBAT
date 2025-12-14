@@ -65,6 +65,11 @@ public class Producto {
     public void setStockMinimo(int stockMinimo) {
         this.stockMinimo = stockMinimo;
     }
+
+    public void setMarca(TipoMarca marca) {this.marca = marca;}
+
+    public void setNombre(String nombre) {this.nombre = nombre;}
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

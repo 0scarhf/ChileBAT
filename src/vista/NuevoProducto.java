@@ -19,6 +19,7 @@ public class NuevoProducto extends JFrame {
     private JTextField textField1Cantidad;
 
     private ControladorInventario controlInv;
+
     public NuevoProducto(ControladorInventario controlInv) {
         this.controlInv = controlInv;
         setContentPane(panel1);
@@ -64,7 +65,7 @@ public class NuevoProducto extends JFrame {
         String nombre = textField1Nombre.getText().trim();
         String idTexto = textField2ID.getText().trim();
         String precioTexto = textField3Precio.getText().trim();
-        String cantidadTexto = textField1Cantidad.getText().trim(); // <--- NUEVO
+        String cantidadTexto = textField1Cantidad.getText().trim();
         String marcaTexto = (String) comboBox1Marca.getSelectedItem();
 
         if (nombre.isEmpty() || idTexto.isEmpty() || precioTexto.isEmpty() || cantidadTexto.isEmpty()) {
@@ -85,7 +86,7 @@ public class NuevoProducto extends JFrame {
         try {
             int id = Integer.parseInt(idTexto);
             int precio = Integer.parseInt(precioTexto);
-            int cantidadInicial = Integer.parseInt(cantidadTexto); // <--- NUEVO
+            int cantidadInicial = Integer.parseInt(cantidadTexto);
 
             if (precio < 0) {
                 JOptionPane.showMessageDialog(this, "El precio no puede ser negativo.");
@@ -96,7 +97,7 @@ public class NuevoProducto extends JFrame {
                 return;
             }
 
-            if (controlInv.buscarProducto(id) != null) {
+            if (controlInv.buscarProductoPorID(id) != null) {
                 JOptionPane.showMessageDialog(this, "Ya existe un producto con el ID " + id, "ID Duplicado", JOptionPane.ERROR_MESSAGE);
                 return;
             }

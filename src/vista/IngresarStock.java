@@ -33,7 +33,7 @@ public class IngresarStock extends JFrame {
         setTitle("Ingreso de Stock");
         cargarMarcasEnCombo();
 
-        //EVENTOS (LISTENERS)
+        //EVENTOS
         comboBox1Marca.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -89,7 +89,7 @@ public class IngresarStock extends JFrame {
 
         try {
             int idBuscado = Integer.parseInt(textoID);
-            Producto p = controlInv.buscarProducto(idBuscado);
+            Producto p = controlInv.buscarProductoPorID(idBuscado);
 
             if (p != null) {
                 productoSeleccionado = p;
@@ -99,7 +99,6 @@ public class IngresarStock extends JFrame {
                 textField1Cantidad.requestFocus();
 
             } else {
-                //! ERROR: ID NO ENCONTRADO
                 JOptionPane.showMessageDialog(this,
                         "ID Inválida: No existe un producto con el ID " + idBuscado,
                         "Error de Búsqueda",
@@ -146,7 +145,6 @@ public class IngresarStock extends JFrame {
 
         if (nombreProducto == null) return;
 
-        // Buscar el objeto producto real basado en el nombre
         List<Producto> lista = controlInv.obtenerInventario();
         for (Producto p : lista) {
             if (p.getNombre().equals(nombreProducto)) {

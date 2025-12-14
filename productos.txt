@@ -53,5 +53,4 @@
 805;Tabaco Van Haasen;4500;10;2
 806;Chicles Mentos Mint;500;100;20
 807;Pilas AA Duracell Par;2500;20;5
-123;Filtros OCB Slim 3mm;1000;0;5
-122;Filtros OCB Slim 1mm;1000;20;5
+123;Filtro OCB Slim 3mm;1500;20;5

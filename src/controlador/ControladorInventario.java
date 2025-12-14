@@ -49,8 +49,17 @@ public class ControladorInventario {
     }
 
     // BUSCAR PRODUCTO POR ID (Eficiencia O(1))
-    public Producto buscarProducto(int idProducto) {
+    public Producto buscarProductoPorID(int idProducto) {
         return inventario.get(idProducto);
+    }
+
+    public boolean eliminarProducto(int idProducto) {
+        if (inventario.containsKey(idProducto)) {
+            inventario.remove(idProducto);
+            guardarInventario();
+            return true;
+        }
+        return false;
     }
     
     // METODO GUARDAR INVENTARIO ACTUALIZADO (Delegación de Responsabilidad)
@@ -79,7 +88,7 @@ public class ControladorInventario {
 
     // INGRESAR STOCK MANUAL
     public boolean ingresarStock(int idProducto, int cantidad) {
-        Producto p = buscarProducto(idProducto);
+        Producto p = buscarProductoPorID(idProducto);
 
         // 1. Validar producto y cantidad (Reutilizando la lógica)
         if (!validarProductoYCantidad(p, cantidad)) {

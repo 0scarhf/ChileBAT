@@ -3,7 +3,6 @@ package controlador;
 import modelo.*;
 import persistencia.PersistenciaDatos;
 import java.util.List;
-import java.util.*;
 
 public class ControladorSistemaVentas {
     private final ControladorInventario inventarioCtrl;
@@ -46,7 +45,7 @@ public class ControladorSistemaVentas {
     }
     
     public boolean esStockCritico(int idProducto) {
-        Producto p = inventarioCtrl.buscarProducto(idProducto);
+        Producto p = inventarioCtrl.buscarProductoPorID(idProducto);
         // Delega la verificación al ControladorInventario
         return p != null && inventarioCtrl.esStockCritico(p); 
     }
@@ -61,7 +60,7 @@ public class ControladorSistemaVentas {
 
     public boolean agregarProducto(Pedido pedido, int idProducto, int cantidad) {
 
-        Producto p = inventarioCtrl.buscarProducto(idProducto);
+        Producto p = inventarioCtrl.buscarProductoPorID(idProducto);
 
         // 1. Validación de Pre-condiciones
         if (p == null || cantidad <= 0 || p.getStock() < cantidad) {
