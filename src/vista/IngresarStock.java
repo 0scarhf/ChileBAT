@@ -26,7 +26,7 @@ public class IngresarStock extends JFrame {
     public IngresarStock(ControladorInventario controlInv) {
         this.controlInv = controlInv;
         setContentPane(panel1);
-        setSize(500, 400);
+        setSize(450, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         Titulo.setText("INGRESAR STOCK DE PRODUCTOS");
@@ -113,12 +113,10 @@ public class IngresarStock extends JFrame {
 
     private void cargarMarcasEnCombo() {
         comboBox1Marca.removeAllItems();
-        comboBox1Marca.addItem("Seleccione una marca...");
+        comboBox1Marca.addItem("-- Seleccione una marca --");
 
         for (TipoMarca marca : TipoMarca.values()) {
-            if (marca != TipoMarca.GENERICO) {
-                comboBox1Marca.addItem(obtenerTextoMarca(marca));
-            }
+            comboBox1Marca.addItem(obtenerTextoMarca(marca));
         }
     }
 

@@ -31,7 +31,7 @@ public class IniciarVenta extends JFrame {
 
         setContentPane(panel1);
         setTitle("Iniciar Venta");
-        setSize(600, 500);
+        setSize(500, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 

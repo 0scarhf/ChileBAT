@@ -13,12 +13,12 @@ public class EditarInventario extends JDialog {
     private JButton cancelarButton;
     private JTextField IDTextField;
     private JTextField NombreTextField;
-    private JComboBox<TipoMarca> MarcaComboBox;
     private JTextField PrecioTextField;
     private JTextField StockTextField;
     private JTextField StockMinimoTextField;
     private JLabel Titulo;
     private JPanel MainPanel;
+    private JComboBox<TipoMarca> MarcaComboBox;
 
     private Producto productoAEditar;
     private boolean guardado = false;

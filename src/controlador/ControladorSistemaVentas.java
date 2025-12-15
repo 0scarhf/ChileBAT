@@ -118,4 +118,8 @@ public class ControladorSistemaVentas {
 
         return true;
     }
+
+    public java.util.List<modelo.Producto> obtenerTodosLosProductos() {
+        return inventarioCtrl.obtenerInventario();
+    }
 }

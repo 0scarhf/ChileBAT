@@ -1,227 +1,378 @@
 package vista;
-import javax.swing.JOptionPane; // Necesario para mensajes de la GUI
-import controlador.*;
+
+import javax.swing.*;
+import javax.swing.text.JTextComponent;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import controlador.ControladorSistemaVentas;
 import modelo.*;
 
-public class GenerarPedido extends javax.swing.JFrame {
+public class GenerarPedido extends JFrame {
 
-    // 1. Atributos para almacenar las dependencias
-    private final ControladorSistemaVentas controlVentas;
-    private final Pedido pedidoActual; // El pedido que se acaba de iniciar
-    
-    // 2. Constructor MODIFICADO: Ahora acepta el Controlador y el Pedido
-    public GenerarPedido(ControladorSistemaVentas controlVentas, Pedido pedidoActual) {
-        this.controlVentas = controlVentas;
-        this.pedidoActual = pedidoActual;
-        initComponents();
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        
-        // Cargar los tipos de recibo en el ComboBox (Factura/Boleta)
-        TipoReciboComboBox.removeAllItems();
-        TipoReciboComboBox.addItem(TipoDocumento.FACTURA.name());
-        TipoReciboComboBox.addItem(TipoDocumento.BOLETA.name());
+    // Componentes
+    private JPanel panel1;
+    private JTextField textFieldRutCliente;
+    private JTextField textFieldNombreCliente;
+
+    // CAMBIO: Ahora es ComboBox
+    private JComboBox<String> comboBoxID;
+
+    private JComboBox<String> comboBoxMarca;
+    private JComboBox<String> comboBoxNombreProducto;
+    private JTextField textFieldPrecio;
+    private JTextField textFieldStockDisponible;
+    private JComboBox<TipoDocumento> comboBoxTipoComprobante;
+    private JButton emitirComprobanteButton;
+    private JButton cancelarButton;
+    private JTextField textFieldVentaStock;
+
+    private final ControladorSistemaVentas control;
+    private final Pedido pedidoActual;
+    private List<Producto> listaGlobalProductos;
+    private List<Producto> listaFiltradaProductos;
+
+    private boolean isProgrammaticUpdate = false;
+    private boolean isFiltering = false;
+
+    public GenerarPedido(ControladorSistemaVentas control, Pedido pedido) {
+        this.control = control;
+        this.pedidoActual = pedido;
+
+        setContentPane(panel1);
+        setTitle("Realizar Venta");
+        setSize(600, 600);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        cargarDatosCliente();
+        inicializarInventario();
+        configurarCombosIniciales();
+
+        // Configuramos autocompletado para el nombre
+        configurarAutocompletadoNombre();
+
+        // Hacemos que el ID sea editable (para poder escribir)
+        comboBoxID.setEditable(true);
+
+        initListeners();
+    }
+
+    // --- MÉTODOS DE MARCA (Tus helpers) ---
+    private String obtenerTextoMarca(Producto p) {
+        if (p.getMarca() == null) return "Sin Marca";
+        return convertirMarcaATexto(p.getMarca());
+    }
+
+    private String convertirMarcaATexto(TipoMarca marca) {
+        switch (marca) {
+            case PALL_MALL: return "Pall Mall";
+            case LUCKY_STRIKE: return "Lucky Strike";
+            case GOLD_LEAF: return "Gold Leaf";
+            case DUNHILL: return "Dunhill";
+            case KENT: return "Kent";
+            case CAMEL: return "Camel";
+            case OCB: return "OCB";
+            case GENERICO: return "Genérico";
+            default: return marca.toString();
+        }
+    }
+
+    // --- CARGA INICIAL ---
+    private void cargarDatosCliente() {
+        Distribuidor cliente = pedidoActual.getCliente();
+        textFieldRutCliente.setText(cliente.getRut());
+        textFieldNombreCliente.setText(cliente.getNombre());
+
+        textFieldRutCliente.setEditable(false);
+        textFieldNombreCliente.setEditable(false);
+        textFieldPrecio.setEditable(false);
+        textFieldStockDisponible.setEditable(false);
+    }
+
+    private void inicializarInventario() {
+        listaGlobalProductos = control.obtenerTodosLosProductos();
+        listaFiltradaProductos = new ArrayList<>(listaGlobalProductos);
+    }
+
+    private void configurarCombosIniciales() {
+        // Tipos de Comprobante
+        comboBoxTipoComprobante.removeAllItems();
+        for (TipoDocumento tipo : TipoDocumento.values()) {
+            comboBoxTipoComprobante.addItem(tipo);
+        }
+
+        // Marcas
+        comboBoxMarca.removeAllItems();
+        comboBoxMarca.addItem("- Todas -");
+        for (TipoMarca m : TipoMarca.values()) {
+            comboBoxMarca.addItem(convertirMarcaATexto(m));
+        }
+
+        // Llenar Productos y IDs con la lista global
+        actualizarListasDesplegables(listaGlobalProductos);
     }
 
     /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
+     * Este método actualiza TANTO el combo de Nombres COMO el de IDs
+     * basándose en la lista filtrada.
      */
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void actualizarListasDesplegables(List<Producto> lista) {
+        isProgrammaticUpdate = true;
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        IDProductoTextField = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        CantidadTextField = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        TipoReciboComboBox = new javax.swing.JComboBox<>();
-        EmitirComprobanteBoton = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        // 1. Actualizar Nombres
+        comboBoxNombreProducto.removeAllItems();
+        comboBoxNombreProducto.addItem("- Seleccione Producto -");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        // 2. Actualizar IDs
+        comboBoxID.removeAllItems();
+        comboBoxID.addItem("- ID -"); // Opción por defecto
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        for (Producto p : lista) {
+            comboBoxNombreProducto.addItem(p.getNombre());
+            comboBoxID.addItem(String.valueOf(p.getIdProducto()));
+        }
 
-        jLabel1.setText("ID Producto");
+        isProgrammaticUpdate = false;
+    }
 
-        IDProductoTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IDProductoTextFieldActionPerformed(evt);
-            }
+    // --- LISTENERS ---
+    private void initListeners() {
+        cancelarButton.addActionListener(e -> dispose());
+
+        // 1. Listener Marca
+        comboBoxMarca.addActionListener(e -> {
+            if (isProgrammaticUpdate) return;
+            filtrarPorMarca();
         });
 
-        jLabel2.setText("Cantidad");
-
-        jLabel3.setText("Tipo recibo");
-
-        TipoReciboComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        TipoReciboComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TipoReciboComboBoxActionPerformed(evt);
-            }
+        // 2. Listener ID (Ahora es un ComboBox)
+        comboBoxID.addActionListener(e -> {
+            if (isProgrammaticUpdate) return;
+            buscarPorSeleccionDeID();
         });
 
-        EmitirComprobanteBoton.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.default.focusedBorderColor"));
-        EmitirComprobanteBoton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        EmitirComprobanteBoton.setText("EMITIR COMPROBANTE");
-        EmitirComprobanteBoton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EmitirComprobanteBotonActionPerformed(evt);
-            }
+        // 3. Listener Nombre Producto
+        comboBoxNombreProducto.addActionListener(e -> {
+            if (isProgrammaticUpdate || isFiltering) return;
+            rellenarDatosDesdeNombre();
         });
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("REALIZAR PEDIDO");
+        emitirComprobanteButton.addActionListener(e -> finalizarVenta());
+    }
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(74, 74, 74)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(CantidadTextField)
-                            .addComponent(IDProductoTextField)
-                            .addComponent(TipoReciboComboBox, 0, 179, Short.MAX_VALUE))
-                        .addGap(0, 60, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(119, 119, 119)
-                .addComponent(EmitirComprobanteBoton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(jLabel4)
-                .addGap(35, 35, 35)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(IDProductoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(CantidadTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TipoReciboComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                .addComponent(EmitirComprobanteBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
-        );
+    // --- LÓGICA DE FILTRADO ---
+    private void filtrarPorMarca() {
+        String marcaSel = (String) comboBoxMarca.getSelectedItem();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        if (marcaSel == null || marcaSel.equals("- Todas -")) {
+            listaFiltradaProductos = new ArrayList<>(listaGlobalProductos);
+        } else {
+            listaFiltradaProductos = new ArrayList<>();
+            for (Producto p : listaGlobalProductos) {
+                if (obtenerTextoMarca(p).equals(marcaSel)) {
+                    listaFiltradaProductos.add(p);
+                }
+            }
+        }
+        actualizarListasDesplegables(listaFiltradaProductos);
+        limpiarCamposProducto();
+    }
 
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void TipoReciboComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TipoReciboComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TipoReciboComboBoxActionPerformed
-
-    private void EmitirComprobanteBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmitirComprobanteBotonActionPerformed
-
-        // 1. Capturar y validar entradas de la GUI
-        String idProductoStr = IDProductoTextField.getText().trim();
-        String cantidadStr = CantidadTextField.getText().trim();
-        String tipoReciboStr = (String) TipoReciboComboBox.getSelectedItem();
-
-        if (idProductoStr.isEmpty() || cantidadStr.isEmpty() || tipoReciboStr == null) {
-            JOptionPane.showMessageDialog(this, "Debe ingresar ID, Cantidad y Tipo de Recibo.", "Error de Entrada", JOptionPane.ERROR_MESSAGE);
+    // --- LÓGICA DE BÚSQUEDA POR ID (Desde el Combo) ---
+    private void buscarPorSeleccionDeID() {
+        // Obtenemos lo que está escrito o seleccionado
+        Object item = comboBoxID.getSelectedItem();
+        if (item == null || item.equals("- ID -")) {
+            limpiarCamposProducto();
             return;
         }
 
-        int idProducto;
-        int cantidad;
+        String textoID = item.toString().trim();
+        if (textoID.isEmpty()) return;
+
         try {
-            idProducto = Integer.parseInt(idProductoStr);
-            cantidad = Integer.parseInt(cantidadStr);
-            
-            // Regla de Negocio: Cantidad por Pallets/Cajas
-            if (cantidad <= 0) {
-                 JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a cero (Pallets/Cajas).", "Error de Cantidad", JOptionPane.ERROR_MESSAGE);
-                 return;
+            int idBuscado = Integer.parseInt(textoID);
+            Producto encontrado = null;
+
+            // Buscamos en la Global para poder cambiar la marca si es necesario
+            for (Producto p : listaGlobalProductos) {
+                if (p.getIdProducto() == idBuscado) {
+                    encontrado = p;
+                    break;
+                }
+            }
+
+            if (encontrado != null) {
+                isProgrammaticUpdate = true;
+
+                // 1. Ajustar Marca si es diferente
+                String marcaBonita = obtenerTextoMarca(encontrado);
+                if (!marcaBonita.equals(comboBoxMarca.getSelectedItem())) {
+                    if (encontrado.getMarca() != null) {
+                        comboBoxMarca.setSelectedItem(marcaBonita);
+                    } else {
+                        comboBoxMarca.setSelectedIndex(0);
+                    }
+                    // Forzamos el refiltrado de las listas
+                    filtrarPorMarca();
+                    isProgrammaticUpdate = true; // Volvemos a bloquear tras filtrar
+                }
+
+                // 2. Seleccionar ID (por si se filtró y se perdió la selección visual)
+                comboBoxID.setSelectedItem(String.valueOf(encontrado.getIdProducto()));
+
+                // 3. Seleccionar Nombre
+                comboBoxNombreProducto.setSelectedItem(encontrado.getNombre());
+
+                // 4. Llenar campos
+                textFieldPrecio.setText(String.valueOf(encontrado.obtenerPrecio()));
+                textFieldStockDisponible.setText(String.valueOf(encontrado.getStock()));
+
+                // 5. Foco a cantidad
+                textFieldVentaStock.requestFocus();
+
+                isProgrammaticUpdate = false;
+
+            } else {
+                JOptionPane.showMessageDialog(this, "ID no encontrado en el sistema.");
+                // Si no existe, limpiamos
+                isProgrammaticUpdate = true;
+                textFieldPrecio.setText("");
+                textFieldStockDisponible.setText("");
+                textFieldVentaStock.setText("");
+                comboBoxNombreProducto.setSelectedItem("- Seleccione Producto -");
+                isProgrammaticUpdate = false;
             }
 
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "ID o Cantidad deben ser números válidos.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+            // Si escribió letras en el ID
+            // No mostramos error invasivo, solo limpiamos o ignoramos
+        }
+    }
+
+    // --- LÓGICA DE BÚSQUEDA POR NOMBRE ---
+    private void rellenarDatosDesdeNombre() {
+        String nombreSel = (String) comboBoxNombreProducto.getSelectedItem();
+
+        if (nombreSel == null || nombreSel.equals("- Seleccione Producto -")) {
+            limpiarCamposProducto();
             return;
         }
 
-        // 2. Lógica de Adición de Producto y Descuento de Stock (DELEGACIÓN)
-        // El controlador valida stock, si es suficiente, descuenta (persiste) y actualiza el pedido.
-        boolean stockOk = controlVentas.agregarProducto(pedidoActual, idProducto, cantidad);
+        for (Producto p : listaFiltradaProductos) {
+            if (p.getNombre().equals(nombreSel)) {
+                isProgrammaticUpdate = true;
 
-        if (!stockOk) {
-            // El controlador devolvió false. Esto significa que el producto no existe o el stock es insuficiente.
-            JOptionPane.showMessageDialog(this, 
-                "ERROR: Producto ID " + idProducto + " no existe o el stock es insuficiente para " + cantidad + " unidades.", 
-                "Stock Insuficiente", 
-                JOptionPane.WARNING_MESSAGE);
+                // Sincronizamos el ID
+                comboBoxID.setSelectedItem(String.valueOf(p.getIdProducto()));
+
+                textFieldPrecio.setText(String.valueOf(p.obtenerPrecio()));
+                textFieldStockDisponible.setText(String.valueOf(p.getStock()));
+
+                // Ajustamos marca visualmente si hiciera falta (opcional)
+                comboBoxMarca.setSelectedItem(obtenerTextoMarca(p));
+
+                textFieldVentaStock.requestFocus();
+                isProgrammaticUpdate = false;
+                return;
+            }
+        }
+    }
+
+    private void limpiarCamposProducto() {
+        if (isProgrammaticUpdate) return;
+        isProgrammaticUpdate = true;
+        // No borramos el ID ni el Nombre aquí para no entorpecer la escritura
+        textFieldPrecio.setText("");
+        textFieldStockDisponible.setText("");
+        textFieldVentaStock.setText("");
+        isProgrammaticUpdate = false;
+    }
+
+    // --- AUTOCOMPLETADO (NOMBRE) ---
+    private void configurarAutocompletadoNombre() {
+        comboBoxNombreProducto.setEditable(true);
+        JTextComponent editor = (JTextComponent) comboBoxNombreProducto.getEditor().getEditorComponent();
+
+        editor.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_UP ||
+                        e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_ESCAPE) return;
+
+                SwingUtilities.invokeLater(() -> {
+                    isFiltering = true;
+                    String texto = editor.getText();
+                    List<String> coincidencias = new ArrayList<>();
+
+                    for (Producto p : listaFiltradaProductos) {
+                        if (p.getNombre().toUpperCase().contains(texto.toUpperCase())) {
+                            coincidencias.add(p.getNombre());
+                        }
+                    }
+
+                    if (!coincidencias.isEmpty()) {
+                        comboBoxNombreProducto.setModel(new DefaultComboBoxModel<>(coincidencias.toArray(new String[0])));
+                        comboBoxNombreProducto.setSelectedItem(texto);
+                        comboBoxNombreProducto.showPopup();
+                    } else {
+                        comboBoxNombreProducto.hidePopup();
+                    }
+                    isFiltering = false;
+                });
+            }
+        });
+    }
+
+    // --- FINALIZAR VENTA ---
+    private void finalizarVenta() {
+        // Validar ID desde el Combo
+        Object itemID = comboBoxID.getSelectedItem();
+        String idTxt = (itemID != null) ? itemID.toString() : "";
+
+        if (idTxt.isEmpty() || idTxt.equals("- ID -")) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un producto válido.");
             return;
         }
 
-        // 3. Emisión y Persistencia (DELEGACIÓN AL CONTROLADOR)
+        String cantidadTxt = textFieldVentaStock.getText().trim();
+        if (cantidadTxt.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar la cantidad a vender.", "Faltan datos", JOptionPane.WARNING_MESSAGE);
+            textFieldVentaStock.requestFocus();
+            return;
+        }
+
         try {
-            // Convierte el String del ComboBox a TipoDocumento (Enum)
-            TipoDocumento tipoDoc = TipoDocumento.valueOf(tipoReciboStr); 
-            
-            // Llama al controlador para finalizar la venta (emite comprobante, guarda venta y guarda inventario)
-            Comprobante comprobanteGenerado = controlVentas.finalizarPedido(pedidoActual, tipoDoc);
+            int idProd = Integer.parseInt(idTxt);
+            int cantidad = Integer.parseInt(cantidadTxt);
 
-            JOptionPane.showMessageDialog(this, 
-                "Venta Finalizada con éxito.\nComprobante #" + comprobanteGenerado.getIdComprobante() + "\nTotal: $" + pedidoActual.getMontoTotal(), 
-                "Éxito", 
-                JOptionPane.INFORMATION_MESSAGE);
-            
-            // Se asume que no hay otra ventana de reporte, solo el mensaje de éxito.
-            this.dispose(); // Cierra la ventana GenerarPedido
+            if (cantidad <= 0) {
+                JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a 0.");
+                return;
+            }
 
-        } catch (Exception e) {
-            // En caso de error de I/O o cualquier fallo en la capa de persistencia/controlador
-            JOptionPane.showMessageDialog(this, "Error al finalizar el pedido: " + e.getMessage(), "Error Crítico", JOptionPane.ERROR_MESSAGE);
+            boolean agregado = control.agregarProducto(pedidoActual, idProd, cantidad);
+
+            if (agregado) {
+                TipoDocumento tipoDoc = (TipoDocumento) comboBoxTipoComprobante.getSelectedItem();
+                Comprobante comprobante = control.finalizarPedido(pedidoActual, tipoDoc);
+
+                JOptionPane.showMessageDialog(this,
+                        "¡Venta Exitosa!\n" +
+                                "Cantidad: " + cantidad + "\n" +
+                                "Total: $" + pedidoActual.getMontoTotal() + "\n" +
+                                "Comprobante N°: " + comprobante.getIdComprobante());
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo realizar la venta (Stock insuficiente).");
+            }
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "ID o Cantidad inválidos.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
         }
-    }//GEN-LAST:event_EmitirComprobanteBotonActionPerformed
-
-    private void IDProductoTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDProductoTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_IDProductoTextFieldActionPerformed
-
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField CantidadTextField;
-    private javax.swing.JButton EmitirComprobanteBoton;
-    private javax.swing.JTextField IDProductoTextField;
-    private javax.swing.JComboBox<String> TipoReciboComboBox;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JPanel jPanel1;
-    // End of variables declaration//GEN-END:variables
+    }
 }

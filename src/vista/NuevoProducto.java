@@ -55,9 +55,7 @@ public class NuevoProducto extends JFrame {
         comboBox1Marca.addItem("Seleccione una marca...");
 
         for (TipoMarca marca : TipoMarca.values()) {
-            if (marca != TipoMarca.GENERICO) {
-                comboBox1Marca.addItem(obtenerTextoMarca(marca));
-            }
+            comboBox1Marca.addItem(obtenerTextoMarca(marca));
         }
     }
 
