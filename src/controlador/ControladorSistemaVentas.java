@@ -8,11 +8,7 @@ public class ControladorSistemaVentas {
     private final ControladorInventario inventarioCtrl;
     private final List<Distribuidor> clientes;
     private final Vendedor vendedor;
-    private final List<Pedido> ventasHistoricas; // Historial de ventas cargado
-
-    // ============
-    // CONSTRUCTOR 
-    // ============
+    private final List<Pedido> ventasHistoricas;
 
 
     public ControladorSistemaVentas(ControladorInventario inventarioCtrl) {
@@ -21,10 +17,6 @@ public class ControladorSistemaVentas {
         this.vendedor = new Vendedor(1, "Vendedor Principal");
         this.ventasHistoricas = PersistenciaDatos.cargarVentas(inventarioCtrl);
     }
-
-    // ====================
-    // MÉTODOS DE CONSULTA
-    // ====================
 
     public List<Distribuidor> obtenerClientes() {
         return clientes;
@@ -50,10 +42,6 @@ public class ControladorSistemaVentas {
         return p != null && inventarioCtrl.esStockCritico(p); 
     }
 
-    // ===============
-    // FLUJO DE VENTA
-    // ===============
-
     public Pedido iniciarPedido(Distribuidor cliente) {
         return new Pedido(generarIdPedido(), cliente);
     }
@@ -76,10 +64,6 @@ public class ControladorSistemaVentas {
 
         return true;
     }
-    
-    public boolean agregarProducto(Pedido pedido, int idProducto) {
-        return agregarProducto(pedido, idProducto, 1);
-    }
 
     public Comprobante finalizarPedido(Pedido pedido, TipoDocumento tipo) {
 
@@ -101,11 +85,26 @@ public class ControladorSistemaVentas {
         return comprobante;
     }
 
-    // =================
-    // MÉTODOS EXTRAS
-    // =================
-
     private int generarIdPedido() {
         return (int)(System.currentTimeMillis() % 100000); 
+    }
+
+    public boolean eliminarCliente(String rut) {
+        Distribuidor clienteAborrar = buscarCliente(rut);
+        if (clienteAborrar != null) {
+            clientes.remove(clienteAborrar);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean actualizarCliente() {
+        try {
+            persistencia.PersistenciaDatos.guardarClientes(clientes);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error al actualizar cliente: " + e.getMessage());
+            return false;
+        }
     }
 }

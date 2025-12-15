@@ -235,7 +235,6 @@ public class PersistenciaDatos {
             return ventas;
     }
 
-
     public static void guardarProductos(List<Producto> lista) {
         try {
             File archivo = new File(PATH_PRODUCTOS);
@@ -261,7 +260,6 @@ public class PersistenciaDatos {
             System.out.println("Error inesperado guardando productos: " + e.getMessage());
         }
     }
-
 
     public static void guardarVenta(Pedido p) {
         try {
@@ -301,7 +299,6 @@ public class PersistenciaDatos {
         }
     }
 
-
     public static void guardarComprobante(Comprobante c) {
         try {
             File archivo = new File(PATH_COMPROBANTES);
@@ -318,6 +315,24 @@ public class PersistenciaDatos {
             System.out.println("Error de E/S al guardar comprobante: " + e.getMessage());
         } catch (Exception e) {
             System.out.println("Error inesperado guardando comprobante: " + e.getMessage());
+        }
+    }
+
+    public static void guardarClientes(java.util.List<modelo.Distribuidor> clientes) {
+        try {
+            java.io.File archivo = new java.io.File("clientes.txt");
+            try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter(archivo))) {
+                for (modelo.Distribuidor d : clientes) {
+                    pw.println(
+                            d.getRut() + "," +
+                                    d.getNombre() + "," +
+                                    d.getDireccion() + "," +
+                                    d.getTipo()
+                    );
+                }
+            }
+        } catch (java.io.IOException e) {
+            System.out.println("Error al guardar clientes: " + e.getMessage());
         }
     }
 }

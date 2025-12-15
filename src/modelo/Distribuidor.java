@@ -21,6 +21,10 @@ public class Distribuidor {
         return rut;
     }
 
+    public void setRut(String rut) {
+        this.rut = rut;
+    }
+
     public String getNombre() {
         return nombre;
     }

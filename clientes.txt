@@ -1,5 +1,5 @@
-66245101-2,Comercializadora Norte,Las Rosas 368,Distribuidor
-28871440-6,Almacén El Sol,Av. Central 130,Minorista
+66245131-2,Comercializadora Norte,Las Rosas 368,Mayorista
+28871440-6,Almacén El Sol,Av. Central 130,Kiosco
 13352959-0,Distribuidora Norte,Av. Los Andes 1698,Distribuidor
 33194392-4,Comercial Regional,Calle Prat 1963,Distribuidor
 52752552-7,Almacén Doña San José,Av. Colón 541,Minorista
