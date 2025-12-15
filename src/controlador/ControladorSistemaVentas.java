@@ -107,4 +107,15 @@ public class ControladorSistemaVentas {
             return false;
         }
     }
+
+    public boolean crearNuevoCliente(String rut, String nombre, String direccion, String tipo) {
+        if (buscarCliente(rut) != null) {
+            return false;
+        }
+        Distribuidor nuevoCliente = new Distribuidor(rut, nombre, direccion, tipo);
+        this.clientes.add(nuevoCliente);
+        persistencia.PersistenciaDatos.guardarClientes(this.clientes);
+
+        return true;
+    }
 }

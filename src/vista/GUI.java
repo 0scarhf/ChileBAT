@@ -174,9 +174,18 @@ public class GUI extends javax.swing.JFrame {
         listaClientes.setVisible(true);
     }//GEN-LAST:event_VerClientesBotonActionPerformed
 
-    private void SalirBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirBotonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_SalirBotonActionPerformed
+    private void SalirBotonActionPerformed(java.awt.event.ActionEvent evt) {
+        int confirmacion = javax.swing.JOptionPane.showConfirmDialog(
+                this,
+                "¿Seguro que quieres salir?",
+                "Cerrar Sistema",
+                javax.swing.JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirmacion == javax.swing.JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }
 
     // Asumo que jButton5 es el botón SALIR
     private void SalirBoton(java.awt.event.ActionEvent evt) {
