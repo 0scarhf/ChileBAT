@@ -2,13 +2,11 @@ package vista;
 
 import controlador.ControladorSistemaVentas;
 import modelo.Distribuidor;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 public class VerCliente extends JFrame {
@@ -18,6 +16,7 @@ public class VerCliente extends JFrame {
     private JButton editarButton;
     private JButton cancelarButton;
     private JButton eliminarClienteButton;
+    private JButton buscarButton;
     private final ControladorSistemaVentas controlVentas;
     private DefaultTableModel modeloTabla;
 
@@ -53,6 +52,52 @@ public class VerCliente extends JFrame {
                 editarCliente();
             }
         });
+        // --- AGREGADO: LÓGICA DEL BOTÓN BUSCAR ---
+        buscarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarClientePorRut();
+            }
+        });
+
+        // (Opcional) Hacer que al dar ENTER en la caja de texto también busque
+        textFieldRut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarClientePorRut();
+            }
+        });
+    }
+
+    private void buscarClientePorRut() {
+        String rutBuscado = textFieldRut.getText().trim();
+
+        if (rutBuscado.isEmpty()) {
+            cargarDatosTabla();
+            return;
+        }
+
+        Distribuidor clienteEncontrado = controlVentas.buscarCliente(rutBuscado);
+
+        modeloTabla.setRowCount(0);
+
+        if (clienteEncontrado != null) {
+            Object[] fila = {
+                    clienteEncontrado.getRut(),
+                    clienteEncontrado.getNombre(),
+                    clienteEncontrado.getDireccion(),
+                    clienteEncontrado.getTipo()
+            };
+            modeloTabla.addRow(fila);
+        } else {
+
+            JOptionPane.showMessageDialog(this,
+                    "No se encontró ningún cliente con el RUT: " + rutBuscado,
+                    "Resultado de búsqueda",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            cargarDatosTabla();
+        }
     }
 
     private void eliminarCliente() {

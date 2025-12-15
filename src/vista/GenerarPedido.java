@@ -328,7 +328,6 @@ public class GenerarPedido extends JFrame {
 
     // --- FINALIZAR VENTA ---
     private void finalizarVenta() {
-        // Validar ID desde el Combo
         Object itemID = comboBoxID.getSelectedItem();
         String idTxt = (itemID != null) ? itemID.toString() : "";
 
@@ -338,8 +337,9 @@ public class GenerarPedido extends JFrame {
         }
 
         String cantidadTxt = textFieldVentaStock.getText().trim();
+
         if (cantidadTxt.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe ingresar la cantidad a vender.", "Faltan datos", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Debe ingresar la cantidad.", "Faltan datos", JOptionPane.WARNING_MESSAGE);
             textFieldVentaStock.requestFocus();
             return;
         }
@@ -358,19 +358,15 @@ public class GenerarPedido extends JFrame {
             if (agregado) {
                 TipoDocumento tipoDoc = (TipoDocumento) comboBoxTipoComprobante.getSelectedItem();
                 Comprobante comprobante = control.finalizarPedido(pedidoActual, tipoDoc);
-
-                JOptionPane.showMessageDialog(this,
-                        "¡Venta Exitosa!\n" +
-                                "Cantidad: " + cantidad + "\n" +
-                                "Total: $" + pedidoActual.getMontoTotal() + "\n" +
-                                "Comprobante N°: " + comprobante.getIdComprobante());
+                EmitirComprobante ticketVisual = new EmitirComprobante(this, comprobante);
+                ticketVisual.setVisible(true);
                 dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo realizar la venta (Stock insuficiente).");
             }
 
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "ID o Cantidad inválidos.");
+            JOptionPane.showMessageDialog(this, "Datos numéricos inválidos.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
         }

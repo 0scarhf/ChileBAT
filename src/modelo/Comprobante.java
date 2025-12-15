@@ -36,8 +36,11 @@ public class Comprobante {
             int precioUnit = p.obtenerPrecio();
             int subtotal = precioUnit * cant;
 
-            sb.append(String.format("%-25s %5d %8d %10d\n", 
-                                    p.getMarca(), cant, precioUnit, subtotal));
+            String nombre = p.getNombre();
+            if(nombre.length() > 25) nombre = nombre.substring(0, 24);
+
+            sb.append(String.format("%-25s %5d %8d %10d\n",
+                    nombre, cant, precioUnit, subtotal));
         }
 
         sb.append("----------------------------------------------------\n");
@@ -49,4 +52,17 @@ public class Comprobante {
     // *Importante*: Necesitas Getters si el Controlador o la Vista quieren acceder a los datos.
     public int getIdComprobante() { return idComprobante; }
     public TipoDocumento getTipoDocumento() { return tipoDocumento; }
+
+    public TipoDocumento getTipo() {
+        return tipoDocumento;
+    }
+
+    // ¡ESTE FALTABA! Es vital para que VistaComprobante pueda leer los productos
+    public Pedido getPedido() {
+        return pedidoAsociado;
+    }
+
+    public Date getFechaEmision() {
+        return fechaEmision;
+    }
 }
