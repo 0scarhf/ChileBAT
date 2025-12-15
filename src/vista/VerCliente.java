@@ -36,9 +36,7 @@ public class VerCliente extends JFrame {
     private void initListeners() {
         cancelarButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose(); // Cerrar ventana
-            }
+            public void actionPerformed(ActionEvent e) {dispose();}
         });
         eliminarClienteButton.addActionListener(new ActionListener() {
             @Override
@@ -52,7 +50,7 @@ public class VerCliente extends JFrame {
                 editarCliente();
             }
         });
-        // --- AGREGADO: LÓGICA DEL BOTÓN BUSCAR ---
+
         buscarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -60,7 +58,6 @@ public class VerCliente extends JFrame {
             }
         });
 
-        // (Opcional) Hacer que al dar ENTER en la caja de texto también busque
         textFieldRut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -116,7 +113,7 @@ public class VerCliente extends JFrame {
         if (confirm == JOptionPane.YES_OPTION) {
             boolean exito = controlVentas.eliminarCliente(rut);
             if (exito) {
-                cargarDatosTabla(); // Recargar tabla
+                cargarDatosTabla();
                 JOptionPane.showMessageDialog(this, "Cliente eliminado.");
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo eliminar.");

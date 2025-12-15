@@ -1,4 +1,4 @@
-101;Cigarrillos Pall Man Azul 20;4800;38;10
+101;Cigarrillos Pall Man Azul 20;4800;26;10
 102;Cigarrillos Pall Man Rojos 20;4800;20;10
 103;Pall Mall Click Mentol 20;4900;35;5
 104;Pall Mall Silver 20;4800;20;5
@@ -8,7 +8,7 @@
 108;Pall Mall Nanokings Blue;4700;12;5
 109;Pall Mall Nanokings Red;4700;10;5
 110;Cigarrillos Pall Man Double Click;5000;18;5
-201;Lucky Strike Red Box 20;5500;60;15
+201;Lucky Strike Red Box 20;5500;50;15
 202;Lucky Strike Blue Box 20;5200;45;10
 203;Cigarrillos Lucky Strike Double Click;5600;30;8
 204;Lucky Strike Wild Mint;5600;25;5
