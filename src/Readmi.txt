@@ -18,7 +18,7 @@
 
 1.  Navega a la carpeta `src/vista`.
 2.  Haz doble clic en el archivo **`Main.java`**.
-3.  Busca el icono verde de **Play** ▶️ al lado de `public static void main` (línea 11 aprox.) y haz clic.
+3.  Ejecuta el codígo.
 4.  El sistema verificará los archivos de datos y abrirá el **Menú Principal**.
 
 => Estructura de Datos (Persistencia)
