@@ -209,4 +209,3 @@
 67684945-4,Distribuidora Regional,Las Rosas 509,Distribuidor
 43606007-4,Distribuidora El Molino,Av. Los Andes 772,Distribuidor
 57112349-4,Comercial Santa Rosa,Las Rosas 50,Distribuidor
-21975910-k,Oscar Illanes,Av queseyo,Distribuidor

@@ -93,6 +93,7 @@ public class ControladorSistemaVentas {
         Distribuidor clienteAborrar = buscarCliente(rut);
         if (clienteAborrar != null) {
             clientes.remove(clienteAborrar);
+            persistencia.PersistenciaDatos.guardarClientes(clientes);
             return true;
         }
         return false;
