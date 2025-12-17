@@ -1,0 +1,36 @@
+# Sistema de Gestión de Ventas e Inventario - ChileBAT 🇨🇱
+
+## 📋 Características Principales
+
+* **Gestión de Inventario:** Control de stock, precios y marcas (Pall Mall, Lucky Strike, etc.).
+* **Sistema de Alertas:** Notificación visual automática cuando un producto está bajo el stock mínimo.
+* **Ventas:** Proceso de venta con selección de clientes y cálculo automático de totales.
+* **Gestión de Clientes:** Base de datos de distribuidores y minoristas validada por RUT.
+* **Persistencia de Datos:** Almacenamiento automático en archivos de texto (`.txt`), sin necesidad de bases de datos externas.
+* **Generación de Comprobantes:** Emisión simulada de Boletas y Facturas.
+
+=> 🛠 Requisitos del Sistema
+
+1.  **Java Development Kit (JDK):** Versión 11 o superior.
+2.  **Entorno de Desarrollo (IDE):** **IntelliJ IDEA** (Obligatorio/Muy Recomendado).
+
+=> Cómo Ejecutar
+
+1.  Navega a la carpeta `src/vista`.
+2.  Haz doble clic en el archivo **`Main.java`**.
+3.  Busca el icono verde de **Play** ▶️ al lado de `public static void main` (línea 11 aprox.) y haz clic.
+4.  El sistema verificará los archivos de datos y abrirá el **Menú Principal**.
+
+=> Estructura de Datos (Persistencia)
+
+El programa generará automáticamente los siguientes archivos en la raíz del proyecto la primera vez que se ejecute:
+
+| `productos.txt` : Catálogo de productos con ID, precio, stock y stock mínimo. |
+| `clientes.txt` : Registro de clientes (RUT, Nombre, Dirección, Tipo). |
+| `ventas.txt` : Historial de todas las ventas realizadas. |
+| `comprobantes.txt` : Registro detallado de tickets emitidos. |
+
+=> Solución de Problemas Comunes
+
+**1. "RUT no encontrado" al vender**
+* Asegúrate de haber creado el cliente primero en la sección "Ver Clientes" > "Nuevo Cliente". El sistema valida que el RUT exista antes de permitir una venta.
