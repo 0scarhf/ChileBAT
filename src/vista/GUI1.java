@@ -29,8 +29,8 @@ public class GUI1 extends JFrame {
         this.controlVentas = ventas;
         setContentPane(panel1);
         setTitle("Sistema de Ventas - ChileBAT");
-        setSize(600, 700);
-        setMinimumSize(new java.awt.Dimension(500, 500));
+        setSize(550, 650);
+        setMinimumSize(new java.awt.Dimension(500, 600));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         cargarAlertasStock();

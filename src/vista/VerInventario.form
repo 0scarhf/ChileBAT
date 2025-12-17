@@ -72,7 +72,7 @@
                 </constraints>
                 <properties>
                   <horizontalAlignment value="0"/>
-                  <text value="Cancelar"/>
+                  <text value="Cerrar"/>
                 </properties>
               </component>
               <component id="d630a" class="javax.swing.JButton" binding="editarButton" default-binding="true">

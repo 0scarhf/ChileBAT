@@ -41,7 +41,7 @@
                   </grid>
                 </constraints>
                 <properties>
-                  <text value="Cancelar"/>
+                  <text value="Cerrar"/>
                 </properties>
               </component>
               <hspacer id="508f2">

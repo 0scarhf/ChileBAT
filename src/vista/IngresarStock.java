@@ -52,6 +52,7 @@ public class IngresarStock extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 guardarStock();
+                dispose();
             }
         });
 
