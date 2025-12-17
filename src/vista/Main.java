@@ -2,7 +2,8 @@ package vista;
 
 import controlador.ControladorInventario;
 import controlador.ControladorSistemaVentas;
-import javax.swing.SwingUtilities;
+
+import javax.swing.*;
 
 public class Main {
     private static ControladorInventario controlInv;
@@ -14,7 +15,7 @@ public class Main {
         
         // GUI
         SwingUtilities.invokeLater(() -> {
-            GUI menuPrincipal = new GUI(controlInv, controlVentas);
+            vista.GUI1 menuPrincipal = new GUI1(controlInv, controlVentas);
             menuPrincipal.setTitle("BAT Chile - Menú Principal");
             menuPrincipal.setLocationRelativeTo(null); 
             menuPrincipal.setVisible(true);

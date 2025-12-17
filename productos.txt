@@ -1,6 +1,6 @@
-101;Cigarrillos Pall Man Azul 20;4800;26;10
-102;Cigarrillos Pall Man Rojos 20;4800;20;10
-103;Pall Mall Click Mentol 20;4900;35;5
+101;Cigarrillos Pall Man Azul 20;4800;0;10
+102;Cigarrillos Pall Man Rojos 20;4800;40;10
+103;Pall Mall Click Mentol 20;4900;20;5
 104;Pall Mall Silver 20;4800;20;5
 105;Pall Mall Blanco 20;4800;15;5
 106;Pall Man Click Naranja;4900;25;5
