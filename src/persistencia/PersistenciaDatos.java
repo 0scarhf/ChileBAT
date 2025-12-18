@@ -144,96 +144,200 @@ public class PersistenciaDatos {
 
     public static List<Pedido> cargarVentas(ControladorInventario inventarioCtrl) {
         List<Pedido> ventas = new ArrayList<>();
+        File archivo = new File(PATH_VENTAS);
 
+        if (!archivo.exists()) {
             try {
-                File archivo = new File(PATH_VENTAS);
-                if (!archivo.exists()) {
-                    archivo.createNewFile();
-                    System.out.println("Archivo de ventas no existía, se creó: " + PATH_VENTAS);
-                    return ventas;
+                archivo.createNewFile();
+                System.out.println("Archivo de ventas no existía, se creó: " + PATH_VENTAS);
+            } catch (IOException e) {
+                System.out.println("Error creando archivo de ventas: " + e.getMessage());
+            }
+            return ventas;
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            int numeroLinea = 0;
+
+            while ((linea = br.readLine()) != null) {
+                numeroLinea++;
+                linea = linea.trim();
+
+                if (linea.isEmpty() || linea.startsWith("//")) {
+                    continue;
                 }
 
-                try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+                try {
+                    // Separamos por asterisco
+                    String[] partes = linea.split("\\*");
 
-                    String linea;
-                    int numeroLinea = 0;
-                    while ((linea = br.readLine()) != null) {
-                        numeroLinea++;
-                        linea = linea.trim();
+                    // VALIDACIÓN DE FORMATO
+                    // Formato antiguo: ID*RUT*MONTO*PRODUCTOS (4 partes)
+                    // Formato nuevo:   ID*RUT*MONTO*MEDIO_PAGO*PRODUCTOS (5 partes)
+                    if (partes.length < 4) {
+                        System.out.println("Advertencia: Línea " + numeroLinea + " formato inválido (se omitió).");
+                        continue;
+                    }
 
-                        // Filtrar líneas vacías y comentarios
-                        if (linea.isEmpty() || linea.startsWith("//")) {
-                            continue;
-                        }
+                    // 1. Datos básicos
+                    int idPedido = Integer.parseInt(partes[0].trim());
+                    String rutCliente = partes[1].trim();
+                    // El monto lo recalcularemos al agregar productos, pero lo leemos por si acaso
+                    // int montoTotal = Integer.parseInt(partes[2].trim());
 
+                    // Creamos un cliente temporal solo con el RUT para poder instanciar el Pedido
+                    Distribuidor clienteTemp = new Distribuidor(rutCliente, "Cliente Histórico", "Sin Dirección", "Desconocido");
+                    Pedido pedido = new Pedido(idPedido, clienteTemp);
+
+                    String productosStr;
+
+                    // 2. Lógica de Retro-compatibilidad (Medio de Pago)
+                    if (partes.length == 5) {
+                        // ES EL NUEVO FORMATO
+                        String medioPagoStr = partes[3].trim();
                         try {
-                            // Formato: id*rut*monto*id:cant,id:cant
-                            String[] partes = linea.split("\\*");
+                            TipoMedioPago mp = TipoMedioPago.valueOf(medioPagoStr);
+                            pedido.setMedioPago(mp);
+                        } catch (IllegalArgumentException e) {
+                            // Si el texto en el archivo no coincide con el ENUM, ponemos efectivo por defecto
+                            pedido.setMedioPago(TipoMedioPago.EFECTIVO);
+                        }
+                        productosStr = partes[4].trim();
+                    } else {
+                        // ES EL FORMATO ANTIGUO (No tiene medio de pago)
+                        pedido.setMedioPago(TipoMedioPago.EFECTIVO); // Valor por defecto
+                        productosStr = partes[3].trim();
+                    }
 
-                            // Validar que tenga exactamente 4 partes
-                            if (partes.length != 4) {
-                                System.out.println("Advertencia: Línea " + numeroLinea + " tiene formato incorrecto (se esperan 4 partes separadas por *), se omite.");
-                                continue;
-                            }
+                    // 3. Reconstrucción de Productos
+                    if (!productosStr.isEmpty()) {
+                        String[] pares = productosStr.split(",");
 
-                            int idPedido = Integer.parseInt(partes[0].trim());
-                            String rutCliente = partes[1].trim();
-                            int montoTotal = Integer.parseInt(partes[2].trim());
-
-                            // ❗ SOLUCIÓN MÁS SIMPLE AL ERROR DE COMPILACIÓN: DECLARAR CLIENTE ❗
-                            // Creamos un objeto Distribuidor (cliente) stub/temporal para que compile
-                            Distribuidor cliente = new Distribuidor(rutCliente, "RUT SIN ENCONTRAR", "SIN DIRECCIÓN", "SIN TIPO");
-
-
-                            String productosStr = partes[3].trim();
-                            if (productosStr.isEmpty()) {
-                                System.out.println("Advertencia: Línea " + numeroLinea + " no tiene productos, se omite.");
-                                continue;
-                            }
-
-                            String[] pares = productosStr.split(",");
-                            Map<Integer, Integer> mapa = new LinkedHashMap<>();
-
-                            for (String par : pares) {
-                                par = par.trim();
-                                if (par.isEmpty()) continue;
-
+                        for (String par : pares) {
+                            try {
                                 String[] info = par.split(":");
-                                if (info.length != 2) {
-                                    System.out.println("Advertencia: Línea " + numeroLinea + " - formato incorrecto en producto (se espera id:cantidad): " + par);
-                                    continue;
+                                if (info.length == 2) {
+                                    int idProd = Integer.parseInt(info[0].trim());
+                                    int cantidad = Integer.parseInt(info[1].trim());
+
+                                    // Buscamos el producto real en el inventario actual
+                                    Producto prodReal = inventarioCtrl.buscarProductoPorID(idProd);
+
+                                    if (prodReal != null) {
+                                        // Agregamos al pedido (esto recalcula el monto automáticamente)
+                                        pedido.agregarProducto(prodReal, cantidad);
+                                    }
                                 }
-
-                                int idProd = Integer.parseInt(info[0].trim());
-                                int cantidad = Integer.parseInt(info[1].trim());
-                                mapa.put(idProd, cantidad);
+                            } catch (NumberFormatException e) {
+                                // Ignorar producto mal formado
                             }
-
-                            if (!mapa.isEmpty()) {
-                                // Ahora 'cliente' existe y el código compila
-                                ventas.add(new Pedido(idPedido, cliente));
-                            } else {
-                                System.out.println("Advertencia: Línea " + numeroLinea + " no tiene productos válidos, se omite.");
-                            }
-                        } catch (NumberFormatException e) {
-                            System.out.println("Advertencia: Línea " + numeroLinea + " tiene valores numéricos inválidos, se omite: " + e.getMessage());
-                        } catch (Exception e) {
-                            System.out.println("Advertencia: Línea " + numeroLinea + " tiene error al procesar, se omite: " + e.getMessage());
                         }
                     }
 
-                }
+                    // Solo agregamos el pedido si tiene productos o si es válido
+                    if (!pedido.getProductos().isEmpty()) {
+                        ventas.add(pedido);
+                    }
 
-            } catch (FileNotFoundException e) {
-                System.out.println("Error: No se encontró el archivo de ventas: " + PATH_VENTAS);
-            } catch (IOException e) {
-                System.out.println("Error de E/S al cargar ventas: " + e.getMessage());
-            } catch (Exception e) {
-                System.out.println("Error inesperado cargando ventas: " + e.getMessage());
+                } catch (Exception e) {
+                    System.out.println("Error procesando línea " + numeroLinea + ": " + e.getMessage());
+                }
             }
 
-            return ventas;
+        } catch (IOException e) {
+            System.out.println("Error de lectura en ventas: " + e.getMessage());
+        }
+
+        return ventas;
     }
+
+//    public static List<Pedido> cargarVentas(ControladorInventario inventarioCtrl) {
+//        List<Pedido> ventas = new ArrayList<>();
+//
+//            try {
+//                File archivo = new File(PATH_VENTAS);
+//                if (!archivo.exists()) {
+//                    archivo.createNewFile();
+//                    System.out.println("Archivo de ventas no existía, se creó: " + PATH_VENTAS);
+//                    return ventas;
+//                }
+//
+//                try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+//
+//                    String linea;
+//                    int numeroLinea = 0;
+//                    while ((linea = br.readLine()) != null) {
+//                        numeroLinea++;
+//                        linea = linea.trim();
+//
+//                        if (linea.isEmpty() || linea.startsWith("//")) {
+//                            continue;
+//                        }
+//
+//                        try {
+//                            // Formato: id*rut*monto*id:cant,id:cant
+//                            String[] partes = linea.split("\\*");
+//
+//                            if (partes.length != 4) {
+//                                System.out.println("Advertencia: Línea " + numeroLinea + " tiene formato incorrecto (se esperan 4 partes separadas por *), se omite.");
+//                                continue;
+//                            }
+//
+//                            int idPedido = Integer.parseInt(partes[0].trim());
+//                            String rutCliente = partes[1].trim();
+//                            int montoTotal = Integer.parseInt(partes[2].trim());
+//
+//                            Distribuidor cliente = new Distribuidor(rutCliente, "RUT SIN ENCONTRAR", "SIN DIRECCIÓN", "SIN TIPO");
+//
+//                            String productosStr = partes[3].trim();
+//                            if (productosStr.isEmpty()) {
+//                                System.out.println("Advertencia: Línea " + numeroLinea + " no tiene productos, se omite.");
+//                                continue;
+//                            }
+//
+//                            String[] pares = productosStr.split(",");
+//                            Map<Integer, Integer> mapa = new LinkedHashMap<>();
+//
+//                            for (String par : pares) {
+//                                par = par.trim();
+//                                if (par.isEmpty()) continue;
+//
+//                                String[] info = par.split(":");
+//                                if (info.length != 2) {
+//                                    System.out.println("Advertencia: Línea " + numeroLinea + " - formato incorrecto en producto (se espera id:cantidad): " + par);
+//                                    continue;
+//                                }
+//
+//                                int idProd = Integer.parseInt(info[0].trim());
+//                                int cantidad = Integer.parseInt(info[1].trim());
+//                                mapa.put(idProd, cantidad);
+//                            }
+//
+//                            if (!mapa.isEmpty()) {
+//                                ventas.add(new Pedido(idPedido, cliente));
+//                            } else {
+//                                System.out.println("Advertencia: Línea " + numeroLinea + " no tiene productos válidos, se omite.");
+//                            }
+//                        } catch (NumberFormatException e) {
+//                            System.out.println("Advertencia: Línea " + numeroLinea + " tiene valores numéricos inválidos, se omite: " + e.getMessage());
+//                        } catch (Exception e) {
+//                            System.out.println("Advertencia: Línea " + numeroLinea + " tiene error al procesar, se omite: " + e.getMessage());
+//                        }
+//                    }
+//
+//                }
+//
+//            } catch (FileNotFoundException e) {
+//                System.out.println("Error: No se encontró el archivo de ventas: " + PATH_VENTAS);
+//            } catch (IOException e) {
+//                System.out.println("Error de E/S al cargar ventas: " + e.getMessage());
+//            } catch (Exception e) {
+//                System.out.println("Error inesperado cargando ventas: " + e.getMessage());
+//            }
+//
+//            return ventas;
+//    }
 
     public static void guardarProductos(List<Producto> lista) {
         try {
@@ -288,6 +392,7 @@ public class PersistenciaDatos {
                         p.getIdPedido() + "*" +
                                 p.getCliente().getRut() + "*" +
                                 p.getMontoTotal() + "*" +
+                                p.getMedioPago().name() + "*" +
                                 productos
                 );
             }

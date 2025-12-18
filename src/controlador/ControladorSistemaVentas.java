@@ -65,21 +65,20 @@ public class ControladorSistemaVentas {
         return true;
     }
 
-    public Comprobante finalizarPedido(Pedido pedido, TipoDocumento tipo) {
+    public Comprobante finalizarPedido(Pedido pedido, TipoDocumento tipo, TipoMedioPago medioPago) {
 
-        // 1. Creación del objeto Comprobante
+        pedido.setMedioPago(medioPago);
+
         Comprobante comprobante = new Comprobante(
-            pedido.getIdPedido() + 5000, // ID simple de comprobante
-            pedido,
-            tipo
+                pedido.getIdPedido() + 5000,
+                pedido,
+                tipo
         );
 
-        // 2. Actualización del estado en memoria
-        this.ventasHistoricas.add(pedido); 
-        
-        // 3. Persistencia
+        this.ventasHistoricas.add(pedido);
+
         PersistenciaDatos.guardarVenta(pedido);
-        inventarioCtrl.guardarInventario(); 
+        inventarioCtrl.guardarInventario();
         PersistenciaDatos.guardarComprobante(comprobante);
 
         return comprobante;

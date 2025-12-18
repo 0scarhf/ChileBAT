@@ -9,16 +9,16 @@ public class Pedido {
     private int idPedido;
     private Date fecha;
     private int montoTotal;
-
     private Map<Producto, Integer> productos;
-
     private Distribuidor cliente;
+    private TipoMedioPago medioPago;
 
     public Pedido(int idPedido, Distribuidor cliente) {
         this.idPedido = idPedido;
         this.cliente = cliente;
         this.fecha = new Date();
         this.productos = new LinkedHashMap<>();
+        this.medioPago = TipoMedioPago.EFECTIVO;
         this.montoTotal = 0;
     }
 
@@ -38,6 +38,14 @@ public class Pedido {
             int cant = entry.getValue();
             montoTotal += prod.obtenerPrecio() * cant;
         }
+    }
+
+    public TipoMedioPago getMedioPago() {
+        return medioPago;
+    }
+
+    public void setMedioPago(TipoMedioPago medioPago) {
+        this.medioPago = medioPago;
     }
 
     public int getIdPedido() { return idPedido; }

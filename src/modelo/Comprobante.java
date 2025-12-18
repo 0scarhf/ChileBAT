@@ -19,14 +19,13 @@ public class Comprobante {
 
     public String generarReporte() {
         StringBuilder sb = new StringBuilder();
-        // Usamos "\n" para saltos de línea y formateo simple.
         sb.append("=== BAT CHILE - ").append(tipoDocumento.name()).append(" #").append(idComprobante).append(" ===\n");
         sb.append("Fecha: ").append(fechaEmision).append("\n");
         // *Corrección* Se asume que getCliente() y getRut() no devuelven null.
         sb.append("Cliente: ").append(pedidoAsociado.getCliente().getNombre()).append("\n");
         sb.append("RUT: ").append(pedidoAsociado.getCliente().getRut()).append("\n");
+        sb.append("Pago: ").append(pedidoAsociado.getMedioPago().toString()).append("\n");
         sb.append("----------------------------------------------------\n");
-        // Usamos String.format para alinear, mejor que solo \t
         sb.append(String.format("%-25s %5s %8s %10s\n", "Producto", "Cant", "P.Unit", "Subtotal"));
         sb.append("----------------------------------------------------\n");
 

@@ -27,6 +27,7 @@ public class GenerarPedido extends JFrame {
     private JButton emitirComprobanteButton;
     private JButton cancelarButton;
     private JTextField textFieldVentaStock;
+    private JComboBox comboBoxMedioDePago;
 
     private final ControladorSistemaVentas control;
     private final Pedido pedidoActual;
@@ -59,7 +60,6 @@ public class GenerarPedido extends JFrame {
         initListeners();
     }
 
-    // --- MÉTODOS DE MARCA (Tus helpers) ---
     private String obtenerTextoMarca(Producto p) {
         if (p.getMarca() == null) return "Sin Marca";
         return convertirMarcaATexto(p.getMarca());
@@ -79,7 +79,6 @@ public class GenerarPedido extends JFrame {
         }
     }
 
-    // --- CARGA INICIAL ---
     private void cargarDatosCliente() {
         Distribuidor cliente = pedidoActual.getCliente();
         textFieldRutCliente.setText(cliente.getRut());
@@ -97,35 +96,32 @@ public class GenerarPedido extends JFrame {
     }
 
     private void configurarCombosIniciales() {
-        // Tipos de Comprobante
         comboBoxTipoComprobante.removeAllItems();
         for (TipoDocumento tipo : TipoDocumento.values()) {
             comboBoxTipoComprobante.addItem(tipo);
         }
 
-        // Marcas
+        comboBoxMedioDePago.removeAllItems();
+        for (TipoMedioPago mp : TipoMedioPago.values()) {
+            comboBoxMedioDePago.addItem(mp);
+        }
+
         comboBoxMarca.removeAllItems();
         comboBoxMarca.addItem("- Todas -");
         for (TipoMarca m : TipoMarca.values()) {
             comboBoxMarca.addItem(convertirMarcaATexto(m));
         }
 
-        // Llenar Productos y IDs con la lista global
         actualizarListasDesplegables(listaGlobalProductos);
     }
 
-    /**
-     * Este método actualiza TANTO el combo de Nombres COMO el de IDs
-     * basándose en la lista filtrada.
-     */
     private void actualizarListasDesplegables(List<Producto> lista) {
         isProgrammaticUpdate = true;
-
-        // 1. Actualizar Nombres
+        //Nombres
         comboBoxNombreProducto.removeAllItems();
         comboBoxNombreProducto.addItem("- Seleccione Producto -");
 
-        // 2. Actualizar IDs
+        //IDs
         comboBoxID.removeAllItems();
         comboBoxID.addItem("- ID -"); // Opción por defecto
 
@@ -137,32 +133,23 @@ public class GenerarPedido extends JFrame {
         isProgrammaticUpdate = false;
     }
 
-    // --- LISTENERS ---
     private void initListeners() {
         cancelarButton.addActionListener(e -> dispose());
-
-        // 1. Listener Marca
         comboBoxMarca.addActionListener(e -> {
             if (isProgrammaticUpdate) return;
             filtrarPorMarca();
         });
-
-        // 2. Listener ID (Ahora es un ComboBox)
         comboBoxID.addActionListener(e -> {
             if (isProgrammaticUpdate) return;
             buscarPorSeleccionDeID();
         });
-
-        // 3. Listener Nombre Producto
         comboBoxNombreProducto.addActionListener(e -> {
             if (isProgrammaticUpdate || isFiltering) return;
             rellenarDatosDesdeNombre();
         });
-
         emitirComprobanteButton.addActionListener(e -> finalizarVenta());
     }
 
-    // --- LÓGICA DE FILTRADO ---
     private void filtrarPorMarca() {
         String marcaSel = (String) comboBoxMarca.getSelectedItem();
 
@@ -180,7 +167,6 @@ public class GenerarPedido extends JFrame {
         limpiarCamposProducto();
     }
 
-    // --- LÓGICA DE BÚSQUEDA POR ID (Desde el Combo) ---
     private void buscarPorSeleccionDeID() {
         // Obtenemos lo que está escrito o seleccionado
         Object item = comboBoxID.getSelectedItem();
@@ -252,7 +238,6 @@ public class GenerarPedido extends JFrame {
         }
     }
 
-    // --- LÓGICA DE BÚSQUEDA POR NOMBRE ---
     private void rellenarDatosDesdeNombre() {
         String nombreSel = (String) comboBoxNombreProducto.getSelectedItem();
 
@@ -291,7 +276,6 @@ public class GenerarPedido extends JFrame {
         isProgrammaticUpdate = false;
     }
 
-    // --- AUTOCOMPLETADO (NOMBRE) ---
     private void configurarAutocompletadoNombre() {
         comboBoxNombreProducto.setEditable(true);
         JTextComponent editor = (JTextComponent) comboBoxNombreProducto.getEditor().getEditorComponent();
@@ -326,7 +310,6 @@ public class GenerarPedido extends JFrame {
         });
     }
 
-    // --- FINALIZAR VENTA ---
     private void finalizarVenta() {
         Object itemID = comboBoxID.getSelectedItem();
         String idTxt = (itemID != null) ? itemID.toString() : "";
@@ -357,7 +340,9 @@ public class GenerarPedido extends JFrame {
 
             if (agregado) {
                 TipoDocumento tipoDoc = (TipoDocumento) comboBoxTipoComprobante.getSelectedItem();
-                Comprobante comprobante = control.finalizarPedido(pedidoActual, tipoDoc);
+                TipoMedioPago medioPago = (TipoMedioPago) comboBoxMedioDePago.getSelectedItem();
+                Comprobante comprobante = control.finalizarPedido(pedidoActual, tipoDoc, medioPago);
+
                 EmitirComprobante ticketVisual = new EmitirComprobante(this, comprobante);
                 ticketVisual.setVisible(true);
                 dispose();

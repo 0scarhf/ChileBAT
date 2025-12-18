@@ -1,7 +1,5 @@
-101;Cigarrillos Pall Man Azul 20;4800;0;10
-102;Cigarrillos Pall Man Rojos 20;4800;40;10
-103;Pall Mall Click Mentol 20;4900;20;5
-104;Pall Mall Silver 20;4800;20;5
+102;Cigarrillos Pall Man Rojos 20;4850;20;10
+104;Pall Mall Silver 20;4850;20;5
 105;Pall Mall Blanco 20;4800;15;5
 106;Pall Man Click Naranja;4900;25;5
 107;Pall Mall XL 20;5000;30;8
@@ -53,4 +51,5 @@
 805;Tabaco Van Haasen;4500;10;2
 806;Chicles Mentos Mint;500;100;20
 807;Pilas AA Duracell Par;2500;20;5
-123;Filtro OCB Slim 3mm;1500;20;5
+101;Cigarrillos Pall Man Azul 20;4800;20;5
+103;Pall Mall Click Mentol 20;4900;10;5

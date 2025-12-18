@@ -1,5 +1,4 @@
-66245131-2,Comercializadora Norte,Las Rosas 368,Mayorista
-28871440-6,Almacén El Sol,Av. Central 130,Kiosco
+28871440-6,Almacén El Sol,Av. Central 130,Minorista
 13352959-0,Distribuidora Norte,Av. Los Andes 1698,Distribuidor
 33194392-4,Comercial Regional,Calle Prat 1963,Distribuidor
 52752552-7,Almacén Doña San José,Av. Colón 541,Minorista
@@ -9,7 +8,6 @@
 83099044-7,Minimarket San José,Av. Colón 66,Minorista
 96609317-1,Almacén La Esperanza,San Martín 483,Minorista
 22874348-6,Comercial Norte,Av. Independencia 1906,Distribuidor
-1344509-4,Comercializadora Norte,Av. Central 641,Distribuidor
 61142167-9,Almacén Doña La Esperanza,Av. Los Andes 1149,Minorista
 67842206-0,Comercializadora El Molino,Av. Central 1672,Distribuidor
 92467232-3,Almacén Don Pepe,Av. Los Andes 1789,Minorista
@@ -209,3 +207,4 @@
 67684945-4,Distribuidora Regional,Las Rosas 509,Distribuidor
 43606007-4,Distribuidora El Molino,Av. Los Andes 772,Distribuidor
 57112349-4,Comercial Santa Rosa,Las Rosas 50,Distribuidor
+1344509-4,Comercializadora Norte,Av. Central 641,Distribuidor
